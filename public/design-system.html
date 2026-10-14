@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design system · Channel Analyzer API</title>
+<link rel="stylesheet" href="/assets/fonts.css">
+<link rel="stylesheet" href="/assets/tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 400 var(--fs-body) / var(--lh-body) var(--font); }
+  a { color: var(--link); }
+  code { font: 400 12px / 1.4 var(--font-mono); }
+  :focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-radius: 4px; }
+  .top { display: flex; align-items: center; gap: var(--s-3); height: var(--masthead-h); padding: 0 var(--s-5); border-bottom: 1px solid var(--line); }
+  .top svg { width: 30px; height: 22px; }
+  .top b { font: 700 18px / 1 var(--font); letter-spacing: -0.03em; }
+  .top span { color: var(--text-2); }
+  .top a { margin-left: auto; }
+  .intro { max-width: 1360px; margin: 0 auto; padding: var(--s-6) var(--s-5) var(--s-4); }
+  .intro h1 { margin: 0 0 var(--s-2); font: 700 var(--fs-display) / var(--lh-display) var(--font); }
+  .intro p { margin: 0; max-width: 80ch; color: var(--text-2); }
+  .themes { max-width: 1360px; margin: 0 auto; padding: 0 var(--s-5) var(--s-7); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-4); }
+  .theme { padding: var(--s-5); border-radius: var(--r-banner); border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+  .theme > h2 { margin: 0 0 var(--s-4); font: 700 var(--fs-title) / var(--lh-title) var(--font); }
+  .theme h3 { margin: var(--s-6) 0 var(--s-3); font: 500 var(--fs-card) / var(--lh-card) var(--font); }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: var(--s-2); }
+  .sw { display: grid; gap: 4px; font-size: var(--fs-meta); line-height: var(--lh-meta); }
+  .sw i { height: 44px; border-radius: 8px; border: 1px solid var(--line); }
+  .sw span { color: var(--text-2); }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); }
+  .type > div { display: flex; align-items: baseline; gap: var(--s-3); padding: var(--s-2) 0; border-top: 1px solid var(--line); }
+  .type > div:first-child { border-top: 0; }
+  .type code { flex: none; width: 140px; color: var(--text-2); }
+  .scale { display: flex; align-items: flex-end; gap: var(--s-2); }
+  .scale div { display: grid; gap: 4px; justify-items: center; color: var(--text-2); font-size: 11px; }
+  .scale i { background: var(--link); border-radius: 2px; }
+  .radius div { display: grid; place-items: center; width: 64px; height: 48px; background: var(--chip); color: var(--text-2); font-size: 11px; }
+  .search { display: flex; height: 40px; max-width: 420px; }
+  .search input { flex: 1; min-width: 0; padding: 0 var(--s-4); border: 1px solid var(--line); border-right: 0; border-radius: var(--r-pill) 0 0 var(--r-pill); background: var(--bg); color: var(--text); font: 400 16px / 1 var(--font); }
+  .search input:focus { outline: 0; border-color: var(--link); }
+  .search span { display: grid; place-items: center; width: 64px; border: 1px solid var(--line); border-radius: 0 var(--r-pill) var(--r-pill) 0; background: var(--chip); }
+  .search svg, .guide-item svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; }
+  .guide-item { display: flex; align-items: center; gap: 24px; width: 220px; height: 40px; padding: 0 var(--s-3); border-radius: var(--r-guide); }
+  .guide-item.on { background: var(--chip); font-weight: 500; }
+  .tabs { display: flex; gap: var(--s-5); border-bottom: 1px solid var(--line); }
+  .tabs span { padding: var(--s-3) 0; color: var(--text-2); font: 500 16px / 1 var(--font); border-bottom: 2px solid transparent; }
+  .tabs span.on { color: var(--text); border-bottom-color: var(--text); }
+  .thumb { position: relative; aspect-ratio: 16 / 9; width: 260px; border-radius: var(--r-card); background: var(--bg-sunken); border: 1px solid var(--line-soft); display: grid; place-items: center; color: var(--text-2); font-size: var(--fs-meta); }
+  .player { width: 100%; max-width: 420px; border-radius: var(--r-card); background: #000000; padding: var(--s-6) var(--s-3) var(--s-2); }
+  .player .progress-fill { transform: scaleX(0.62); }
+  .player .progress-dot { left: 62%; }
+  .player p { margin: var(--s-2) 0 0; color: #F1F1F1; font-size: 13px; }
+  .desc-box { max-width: 420px; padding: var(--s-3); border-radius: var(--r-card); background: var(--chip); }
+  .desc-box b { display: block; font-weight: 500; }
+  .empty { padding: var(--s-5); border-radius: var(--r-card); background: var(--chip); color: var(--text-2); text-align: center; max-width: 420px; }
+  .error { color: var(--error); }
+  @media (max-width: 1000px) { .themes { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<header class="top">
+  <svg viewBox="0 0 30 22" aria-hidden="true"><rect x="1" y="13" width="7" height="8" rx="2" fill="currentColor"/><rect x="11.5" y="7" width="7" height="14" rx="2" fill="currentColor"/><rect x="22" y="1" width="7" height="20" rx="2" fill="#FF0033"/></svg>
+  <b>Channel Analyzer</b><span>Design system</span>
+  <a class="pill pill-outline" href="/">Back to home</a>
+</header>
+<div class="intro">
+  <h1>Design system</h1>
+  <p>Tokens and components used by the home page and the API docs header. The visual reference is youtube.com: dark and light grounds, grey chips, pill controls, Roboto, and one red kept for live state and elapsed time. No YouTube logo or brand asset is used. Source: <code>/assets/tokens.css</code>, documented in <code>DESIGN.md</code>.</p>
+</div>
+
+<main class="themes">
+
+  <section class="theme" data-theme="dark" aria-labelledby="dark-h"><h2 id="dark-h">Dark</h2><div data-body></div></section>
+  <section class="theme" data-theme="light" aria-labelledby="light-h"><h2 id="light-h">Light</h2><div data-body></div></section>
+  <template id="theme-body">
+    <h3>Colour</h3>
+    <div class="swatches" data-swatches></div>
+
+    <h3>Type</h3>
+    <div class="type">
+      <div><code>display 36/44 700</code><span style="font:700 var(--fs-display)/var(--lh-display) var(--font)">Channel Analyzer</span></div>
+      <div><code>title 20/28 700</code><span style="font:700 var(--fs-title)/var(--lh-title) var(--font)">How a fetch runs</span></div>
+      <div><code>card 16/22 500</code><span style="font:500 var(--fs-card)/var(--lh-card) var(--font)">Comments</span></div>
+      <div><code>body 14/20 400</code><span>Top 100 per video with every reply.</span></div>
+      <div><code>meta 12/18 400</code><span style="font-size:var(--fs-meta);color:var(--text-2)">2.43M subscribers · 6,525 videos</span></div>
+      <div><code>mono 13 Roboto Mono</code><code style="font-size:13px;width:auto;color:var(--text)">GET /fetch-jobs/{job_id}</code></div>
+    </div>
+
+    <h3>Spacing and radius</h3>
+    <div class="row" style="gap:var(--s-6)">
+      <div class="scale"><div><i style="width:4px;height:4px"></i>4</div><div><i style="width:8px;height:8px"></i>8</div><div><i style="width:12px;height:12px"></i>12</div><div><i style="width:16px;height:16px"></i>16</div><div><i style="width:24px;height:24px"></i>24</div><div><i style="width:32px;height:32px"></i>32</div><div><i style="width:48px;height:48px"></i>48</div></div>
+      <div class="row radius"><div style="border-radius:var(--r-chip)">chip 8</div><div style="border-radius:var(--r-guide)">guide 10</div><div style="border-radius:var(--r-card)">card 12</div><div style="border-radius:var(--r-banner)">banner 16</div><div style="border-radius:var(--r-pill)">pill</div></div>
+    </div>
+
+    <h3>Buttons and chips</h3>
+    <div class="row">
+      <button class="pill pill-primary" type="button">Open API docs</button>
+      <button class="pill" type="button">Start a fetch job</button>
+      <button class="pill pill-outline" type="button">Docs</button>
+      <button class="pill" type="button" disabled style="opacity:.4;cursor:not-allowed">Disabled</button>
+    </div>
+    <div class="row" style="margin-top:var(--s-3)">
+      <button class="chip" type="button" aria-pressed="true">All</button>
+      <button class="chip" type="button" aria-pressed="false">Fetch jobs</button>
+      <button class="chip" type="button" aria-pressed="false">Transcripts</button>
+    </div>
+
+    <h3>Badges and status</h3>
+    <div class="row">
+      <span class="method method-get">GET</span><span class="method method-post">POST</span><span class="method method-patch">PATCH</span><span class="method method-delete">DELETE</span>
+      <span class="status" data-state="ok">Online</span><span class="status" data-state="error">Offline</span><span class="status" data-state="checking">Checking</span>
+      <span class="avatar">FJ</span>
+    </div>
+
+    <h3>Inputs and navigation</h3>
+    <div class="search"><input type="search" placeholder="Search endpoints" aria-label="Search endpoints"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8"/></svg></span></div>
+    <div style="margin-top:var(--s-3)">
+      <div class="guide-item on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5L12 4l8 6.5V20h-5v-6H9v6H4z"/></svg>Home</div>
+      <div class="guide-item"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/></svg>Endpoints</div>
+    </div>
+    <div class="tabs" style="margin-top:var(--s-3)"><span class="on">Home</span><span>What it stores</span><span>Endpoints</span></div>
+
+    <h3>Media</h3>
+    <div class="row" style="align-items:flex-start">
+      <div class="thumb">16:9 thumbnail, radius 12<span class="badge-time">1 unit</span></div>
+      <div class="player"><div class="progress"><span class="progress-fill"></span><span class="progress-dot"></span></div><p>Red progress: quota day elapsed</p></div>
+    </div>
+
+    <h3>States</h3>
+    <div class="desc-box"><b>Description box</b>Grey box for long supporting text and tables.</div>
+    <div class="empty" style="margin-top:var(--s-3)">No route matches "caption". Try another word or the All chip.</div>
+    <p class="error" style="margin:var(--s-3) 0 0">No response. Is the api container running?</p>
+  </template>
+</main>
+
+<script>
+(() => {
+  const TOKENS = ["bg", "bg-raised", "bg-sunken", "chip", "chip-hover", "chip-active", "line", "text", "text-2", "text-3", "link", "red", "red-text", "ok", "warn", "error", "m-get", "m-post", "m-patch", "m-delete"];
+  const tpl = document.getElementById("theme-body");
+  document.querySelectorAll(".theme").forEach((section) => {
+    const body = section.querySelector("[data-body]");
+    body.appendChild(tpl.content.cloneNode(true));
+    const styles = getComputedStyle(section);
+    body.querySelector("[data-swatches]").innerHTML = TOKENS.map((t) => {
+      const v = styles.getPropertyValue(`--${t}`).trim().toUpperCase();
+      return `<div class="sw"><i style="background:var(--${t})"></i><b>--${t}</b><span>${v}</span></div>`;
+    }).join("");
+  });
+})();
+</script>
+</body>
+</html>

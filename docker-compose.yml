@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: channel-analyzer-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-youtube_channel_analyzer}
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      # Data lives in the group folder, next to this repo.
+      - ../channel-analyzer-database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - channel-analyzer-network
+
+  api:
+    build: .
+    container_name: channel-analyzer-api
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-youtube_channel_analyzer}
+    # Local development: code is mounted and uvicorn reloads on change.
+    command: sh -c "prisma migrate deploy && uvicorn application:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - channel-analyzer-network
+
+networks:
+  channel-analyzer-network:
+    name: channel-analyzer-network

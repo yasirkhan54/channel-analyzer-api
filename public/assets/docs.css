@@ -1,0 +1,214 @@
+/* Swagger UI info section only (SERVICE_DESCRIPTION), in the design system's light theme (tokens.css).
+   Everything is scoped to .information-container; the endpoint list below keeps Swagger's own look.
+   Layout: compact channel header, one chip row, three open columns split by hairlines, then a borderless
+   grid of what gets stored. No boxed cards. docs.js keeps the quota clock live. */
+
+.swagger-ui .information-container .info { margin: 28px 0 0; }
+.swagger-ui .information-container .info hgroup.main { display: none; }
+.swagger-ui .information-container .info .description { margin: 0; }
+
+.swagger-ui .ytca { font: 400 var(--fs-body) / var(--lh-body) var(--font); color: var(--text); }
+.swagger-ui .ytca * { box-sizing: border-box; }
+.swagger-ui .information-container .ytca :is(p, li, span, div, b, h1, h2, a) { font-family: var(--font); }
+.swagger-ui .information-container .ytca :is(code, .method, .ytca-count, .ytca-ladder b, .ytca-cost) {
+  font-family: var(--font-mono);
+}
+/* :where keeps this reset at zero weight, so the layout rules below win their margins. */
+.swagger-ui .ytca :where(p, ol, ul, h1, h2) { margin: 0; padding: 0; color: inherit; }
+/* Paragraphs need a heavier reset: Swagger's .info p margins outrank a zero-weight one. Deliberate p margins
+   below carry !important. */
+.swagger-ui .information-container .ytca p { margin: 0; }
+/* Swagger's own .info / .markdown p rules set 14px text; pin our paragraph sizes against them. */
+.swagger-ui .ytca .ytca-day-legend { font-size: 11px !important; line-height: 16px !important; }
+.swagger-ui .ytca :is(.ytca-flow p, .ytca-store p) { font-size: 13px !important; line-height: 19px !important; }
+.swagger-ui .ytca .ytca-small { font-size: var(--fs-meta) !important; line-height: var(--lh-meta) !important; }
+.swagger-ui .ytca li { list-style: none; }
+.swagger-ui .ytca a { color: inherit; text-decoration: none; }
+.swagger-ui .ytca a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-radius: 4px; }
+.swagger-ui .ytca code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--chip);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.swagger-ui .ytca h2 { font: 700 16px / 22px var(--font); margin-bottom: var(--s-4); }
+
+/* Swagger's normalize sets a { background-color: transparent } at higher specificity than the tokens. */
+.swagger-ui .ytca .pill, .swagger-ui .ytca .chip { font-family: var(--font); background: var(--chip); color: var(--text); }
+.swagger-ui .ytca .pill:hover, .swagger-ui .ytca .chip:hover { background: var(--chip-hover); }
+.swagger-ui .ytca .pill-primary { background: var(--text); color: var(--bg); }
+.swagger-ui .ytca .pill-primary:hover { background: #272727; color: var(--bg); }
+
+/* Channel header: identity left, actions right */
+.swagger-ui .ytca-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--s-5);
+  align-items: center;
+}
+.swagger-ui .ytca-avatar {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--chip);
+}
+.swagger-ui .ytca-avatar svg { width: 44px; height: 32px; }
+.swagger-ui .ytca-id h1 { font: 700 32px / 40px var(--font); letter-spacing: -0.01em; }
+.swagger-ui .ytca-meta { display: flex; flex-wrap: wrap; gap: 2px 6px; margin-top: 2px !important; color: var(--text-2); }
+.swagger-ui .ytca-meta b { color: var(--text); font-weight: 500; }
+.swagger-ui .ytca-meta i { font-style: normal; }
+.swagger-ui .ytca-desc { margin-top: 6px !important; color: var(--text-2); max-width: 70ch; }
+.swagger-ui .ytca-actions { display: flex; flex-wrap: nowrap; justify-content: flex-end; gap: var(--s-2); }
+
+.swagger-ui .ytca-chips {
+  display: flex;
+  gap: var(--s-3);
+  margin-top: var(--s-5);
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+/* Three open columns */
+.swagger-ui .ytca-cols { display: grid; grid-template-columns: 1.15fr 1fr 1fr; padding: var(--s-6) 0; border-bottom: 1px solid var(--line); }
+.swagger-ui .ytca-col { padding: 0 var(--s-6); border-left: 1px solid var(--line); min-width: 0; }
+.swagger-ui .ytca-col:first-child { padding-left: 0; border-left: 0; }
+.swagger-ui .ytca-col:last-child { padding-right: 0; }
+
+/* Column 1: stepper */
+.swagger-ui .ytca-flow { position: relative; display: grid; gap: var(--s-5); counter-reset: f; }
+.swagger-ui .ytca-flow::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: var(--line);
+}
+.swagger-ui .ytca-flow li { position: relative; padding-left: 40px; counter-increment: f; }
+.swagger-ui .ytca-flow li::before {
+  content: counter(f);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--text);
+  color: var(--bg);
+  font: 500 12px / 24px var(--font);
+  text-align: center;
+}
+.swagger-ui .ytca-step-head { display: flex; align-items: baseline; gap: var(--s-2); }
+.swagger-ui .ytca-step-head b { font-weight: 500; font-size: 15px; }
+.swagger-ui .ytca-note { color: var(--text-3); font-size: var(--fs-meta); }
+.swagger-ui .ytca-route { display: inline-flex; align-items: center; gap: var(--s-2); margin: 6px 0 2px; }
+.swagger-ui .ytca-route code { background: none; padding: 0; font-size: 13px; }
+.swagger-ui .ytca-route:hover code { text-decoration: underline; text-underline-offset: 3px; }
+.swagger-ui .ytca-flow p { color: var(--text-2); font-size: 13px; line-height: 19px; }
+
+/* Column 2: live quota clock and price ladder */
+.swagger-ui .ytca-clock { display: grid; gap: 2px; margin-bottom: var(--s-3) !important; }
+.swagger-ui .ytca-count { font-size: 34px; line-height: 40px; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.swagger-ui .ytca-reset-at { color: var(--text-2); }
+.swagger-ui .ytca-day { position: relative; height: 4px; border-radius: 2px; background: var(--chip-hover); }
+.swagger-ui .ytca-day span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--ratio, 0) * 100%);
+  border-radius: 2px;
+  background: var(--red);
+}
+.swagger-ui .ytca-day span::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: -4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--red);
+}
+.swagger-ui .ytca-day-legend { display: flex; justify-content: space-between; margin-top: 6px !important; color: var(--text-3); font-size: 11px; }
+.swagger-ui .ytca-ladder { display: grid; margin-top: var(--s-5) !important; }
+.swagger-ui .ytca-ladder li { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: var(--s-3); align-items: baseline; padding: 8px 0; border-top: 1px solid var(--line); }
+.swagger-ui .ytca-ladder li:first-child { border-top: 0; padding-top: 0; }
+.swagger-ui .ytca-ladder b { font-size: 20px; line-height: 24px; font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+.swagger-ui .ytca-ladder b.free { color: var(--ok); }
+.swagger-ui .ytca-ladder b.high { color: var(--warn); }
+.swagger-ui .ytca-ladder span { color: var(--text-2); font-size: 13px; line-height: 19px; }
+.swagger-ui .ytca-small { margin-top: var(--s-3) !important; color: var(--text-2); font-size: var(--fs-meta); }
+
+/* Column 3: authorize and rules */
+.swagger-ui .ytca-auth { display: grid; gap: var(--s-3); counter-reset: a; }
+.swagger-ui .ytca-auth li { position: relative; padding-left: 32px; color: var(--text-2); counter-increment: a; }
+.swagger-ui .ytca-auth li::before {
+  content: counter(a);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--chip);
+  color: var(--text);
+  font: 500 12px / 22px var(--font);
+  text-align: center;
+}
+.swagger-ui .ytca-auth b { color: var(--text); font-weight: 500; }
+.swagger-ui .ytca-limit { margin-top: var(--s-3) !important; padding: 8px 12px; border-radius: var(--r-chip); background: var(--chip); color: var(--text-2); }
+.swagger-ui .ytca-limit b { color: var(--text); font-weight: 500; }
+.swagger-ui .ytca .ytca-h2-gap { margin-top: var(--s-6); }
+.swagger-ui .ytca-rules { display: grid; gap: var(--s-2); }
+.swagger-ui .ytca-rules li { position: relative; padding-left: 26px; color: var(--text-2); }
+.swagger-ui .ytca-rules li::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 5px;
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid var(--ok);
+  border-bottom: 2px solid var(--ok);
+  transform: rotate(-45deg);
+}
+.swagger-ui .ytca-rules b { color: var(--text); font-weight: 500; }
+
+/* What it stores: borderless 4 x 2 grid */
+.swagger-ui .ytca-store { padding: var(--s-6) 0 var(--s-5); }
+.swagger-ui .ytca-store h2 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px var(--s-3); }
+.swagger-ui .ytca-store h2 span { color: var(--text-2); font-size: var(--fs-body); font-weight: 400; }
+.swagger-ui .ytca-store ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-5) var(--s-6); }
+.swagger-ui .ytca-store li { display: flex; gap: var(--s-3); }
+.swagger-ui .ytca-ico { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--chip); }
+.swagger-ui .ytca-ico svg { width: 18px; height: 18px; fill: none; stroke: var(--text); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.swagger-ui .ytca-store b { font-weight: 500; }
+.swagger-ui .ytca-cost { margin-left: 6px; padding: 0 6px; border-radius: 4px; background: var(--chip); color: var(--text-2); font-size: 11px; line-height: 18px; white-space: nowrap; }
+.swagger-ui .ytca-store p { margin-top: 2px !important; color: var(--text-2); font-size: 13px; line-height: 19px; }
+
+@media (max-width: 1180px) {
+  .swagger-ui .ytca-head { grid-template-columns: auto minmax(0, 1fr); }
+  .swagger-ui .ytca-actions { grid-column: 1 / -1; justify-content: flex-start; flex-wrap: wrap; }
+  .swagger-ui .ytca-cols { grid-template-columns: 1fr 1fr; row-gap: var(--s-6); }
+  .swagger-ui .ytca-col:nth-child(3) { grid-column: 1 / -1; padding-left: 0; border-left: 0; padding-top: var(--s-6); border-top: 1px solid var(--line); }
+  .swagger-ui .ytca-store ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  .swagger-ui .ytca-head { grid-template-columns: minmax(0, 1fr); gap: var(--s-3); }
+  .swagger-ui .ytca-avatar { width: 64px; height: 64px; }
+  .swagger-ui .ytca-avatar svg { width: 32px; height: 24px; }
+  .swagger-ui .ytca-id h1 { font-size: 24px; line-height: 32px; }
+  .swagger-ui .ytca-cols { grid-template-columns: minmax(0, 1fr); }
+  .swagger-ui .ytca-col { padding: var(--s-6) 0 0; border-left: 0; border-top: 1px solid var(--line); }
+  .swagger-ui .ytca-col:first-child { padding-top: 0; border-top: 0; }
+  .swagger-ui .ytca-chips { mask-image: linear-gradient(90deg, #000000 85%, transparent); padding-right: var(--s-6); }
+  .swagger-ui .ytca-store ul { grid-template-columns: minmax(0, 1fr); }
+  .swagger-ui .ytca code { white-space: normal; overflow-wrap: anywhere; }
+}

@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Channel Analyzer API</title>
+<meta name="description" content="Local API that fetches a channel's whole public record once, inside the daily quota, and serves it back at zero quota cost.">
+<script>try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
+<link rel="stylesheet" href="/assets/fonts.css">
+<link rel="stylesheet" href="/assets/tokens.css?v=2026-10-14b">
+<link rel="stylesheet" href="/assets/home.css?v=2026-10-14b">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 30 22"><rect x="1" y="13" width="7" height="8" rx="2" fill="currentColor"/><rect x="11.5" y="7" width="7" height="14" rx="2" fill="currentColor"/><rect x="22" y="1" width="7" height="20" rx="2" fill="#FF0033"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5V21h16"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.5L12 4l8 6.5V20h-5v-6H9v6H4z"/></symbol>
+  <symbol id="i-routes" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></symbol>
+  <symbol id="i-json" viewBox="0 0 24 24"><path d="M8 4c-2 0-3 1-3 3v2c0 1.5-1 2.5-2 3 1 .5 2 1.5 2 3v2c0 2 1 3 3 3M16 4c2 0 3 1 3 3v2c0 1.5 1 2.5 2 3-1 .5-2 1.5-2 3v2c0 2-1 3-3 3"/></symbol>
+  <symbol id="i-swatch" viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><circle cx="16" cy="16" r="4"/><path d="M14 4h6v6M4 14v6h6"/></symbol>
+  <symbol id="i-channel" viewBox="0 0 24 24"><circle cx="12" cy="9" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 19v2M16 19v2"/></symbol>
+  <symbol id="i-comment" viewBox="0 0 24 24"><path d="M20 15a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-playlist" viewBox="0 0 24 24"><path d="M4 6h12M4 11h12M4 16h7"/><path d="M15 15l5-3v8z" /></symbol>
+  <symbol id="i-text" viewBox="0 0 24 24"><path d="M4 6h16M4 11h16M4 16h10"/></symbol>
+  <symbol id="i-cc" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 10.5a2 2 0 1 0 0 3M17 10.5a2 2 0 1 0 0 3"/></symbol>
+  <symbol id="i-shelf" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="14" width="8" height="6" rx="2"/><rect x="13" y="14" width="8" height="6" rx="2"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 21s7-3.5 7-9V5l-7-2.5L5 5v7c0 5.5 7 9 7 9z"/></symbol>
+</svg>
+
+<a class="skip pill pill-primary" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="mh-start">
+    <button class="icon-btn" id="menu-btn" type="button" aria-label="Show navigation" aria-controls="guide" aria-expanded="false"><svg class="i"><use href="#i-menu"/></svg></button>
+    <a class="logo" href="/" aria-label="Channel Analyzer API home"><svg class="logo-mark"><use href="#mark"/></svg><span class="logo-word">Channel Analyzer</span><sup>API</sup></a>
+  </div>
+  <form class="mh-search" role="search" id="search-form">
+    <label class="sr" for="ep-search">Search endpoints</label>
+    <input id="ep-search" type="search" placeholder="Search endpoints, e.g. transcript" autocomplete="off">
+    <button class="search-btn" type="submit" aria-label="Search endpoints"><svg class="i"><use href="#i-search"/></svg></button>
+  </form>
+  <div class="mh-end">
+    <span class="status" id="status" data-state="checking" role="status" aria-live="polite"><span id="status-text">Checking</span></span>
+    <button class="icon-btn" id="theme-btn" type="button" aria-label="Switch theme"><svg class="i"><use id="theme-icon" href="#i-sun"/></svg></button>
+    <a class="pill pill-outline" href="/api-docs"><svg class="i"><use href="#i-book"/></svg><span>Docs</span></a>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="guide" id="guide" aria-label="Site">
+    <div class="guide-sec">
+      <a href="#top" aria-current="true"><svg class="i"><use href="#i-home"/></svg><span>Home</span></a>
+      <a href="#endpoints"><svg class="i"><use href="#i-routes"/></svg><span>Endpoints</span></a>
+      <a href="/api-docs"><svg class="i"><use href="#i-book"/></svg><span>API docs</span></a>
+      <a href="/health"><svg class="i"><use href="#i-pulse"/></svg><span>Health</span></a>
+      <a href="/api-docs/openapi.json"><svg class="i"><use href="#i-json"/></svg><span>OpenAPI JSON</span></a>
+      <a href="/design-system"><svg class="i"><use href="#i-swatch"/></svg><span>Design system</span></a>
+    </div>
+    <div class="guide-sec">
+      <h2 class="guide-title">Endpoint groups</h2>
+      <div id="guide-groups"><a href="#endpoints"><span>Loading groups</span></a></div>
+    </div>
+    <div class="guide-foot">
+      Runs locally with Docker Compose.<br>
+      <a href="/api-docs">Docs</a> · <a href="/health">Health</a> · <a href="/design-system">Design system</a><br>
+      v0.1.0
+    </div>
+  </nav>
+  <div class="scrim" id="scrim"></div>
+
+  <main class="content" id="main">
+    <div class="page" id="top">
+
+      <section aria-labelledby="channel-name">
+        <div class="banner" aria-label="Today's quota day, midnight to midnight Pacific time">
+          <div class="timeline" id="timeline" aria-hidden="true"></div>
+          <div class="elapsed" id="elapsed"><span class="now-tag" id="now-tag">now</span></div>
+          <div class="banner-copy">
+            <b>Quota day</b>
+            <span id="banner-reset">Resets at midnight Pacific time</span>
+          </div>
+        </div>
+
+        <div class="channel-head">
+          <div class="avatar-xl" aria-hidden="true"><svg><use href="#mark"/></svg></div>
+          <div>
+            <h1 id="channel-name">Channel Analyzer API</h1>
+            <p class="meta-line"><b>@localhost:8000</b><span class="sep"></span><span><span id="ep-count">38</span> endpoints</span><span class="sep"></span><span>10,000 units a day</span><span class="sep"></span><span>v0.1.0</span></p>
+            <p class="desc">Fetch a channel once, read it at zero quota. Send a channel URL, @handle or ID: a background job collects the channel, every video, comments with replies, playlists and transcripts, pauses when the daily quota runs out and picks up again after the reset.</p>
+            <div class="actions">
+              <a class="pill pill-primary" href="/api-docs">Open API docs</a>
+              <a class="pill" href="/api-docs#/Fetch%20jobs">Start a fetch job</a>
+            </div>
+          </div>
+        </div>
+
+        <nav class="tabs" aria-label="Page sections">
+          <a href="#top" aria-current="true">Home</a>
+          <a href="#data">What it stores</a>
+          <a href="#endpoints">Endpoints</a>
+          <a href="#calling">Calling the API</a>
+        </nav>
+      </section>
+
+      <section class="watch" aria-labelledby="watch-title">
+        <div>
+          <div class="player" aria-label="Live response from the health endpoint">
+            <div class="player-top"><span class="method method-get">GET</span><code>/health</code><span class="ms" id="health-ms">waiting</span></div>
+            <div class="player-screen"><pre id="health-out" aria-live="polite"><span class="j-dim">Waiting for the first response</span></pre></div>
+            <div class="player-bar">
+              <div class="progress" role="progressbar" aria-label="Quota day elapsed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="day-progress"><span class="progress-fill"></span><span class="progress-dot"></span></div>
+              <div class="controls">
+                <span class="live" id="live" data-state="checking">LIVE</span>
+                <span class="time" id="day-time">00:00:00 / 24:00:00</span>
+                <span class="right" id="day-reset">checks every 15 s</span>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="watch-title" id="watch-title">Daily quota: 10,000 units, shared by every job and search</h2>
+          <div class="owner">
+            <span class="avatar"><svg class="i" style="width:20px;height:20px"><use href="#mark"/></svg></span>
+            <span class="owner-name"><b>Quota ledger</b><span>GET /quota, needs the key</span></span>
+            <span class="pills"><span class="pill">200 unit safety margin</span><span class="pill" id="reset-pill">Resets midnight Pacific</span></span>
+          </div>
+          <div class="desc-box">
+            <b id="reset-line">Next reset: midnight Pacific time</b>
+            <p>Every job and search draws on one Google Cloud project's daily limit, so jobs run one at a time and a paused job resumes from its saved cursor without fetching a page twice. Reading stored data never spends quota.</p>
+            <table class="costs">
+              <caption>What each YouTube call costs</caption>
+              <tr><td>Reading anything already stored</td><td class="free">0</td></tr>
+              <tr><td>Transcripts (caption data, not the Data API)</td><td class="free">0</td></tr>
+              <tr><td>Any list call: 50 videos, 100 comments or 50 playlists a page</td><td>1</td></tr>
+              <tr><td>Resolve a channel ID or @handle</td><td>1</td></tr>
+              <tr><td>Caption track list, per video</td><td class="high">50</td></tr>
+              <tr><td>Keyword search page, or a legacy /c/ URL</td><td class="high">100</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <aside class="upnext" aria-labelledby="upnext-h">
+          <div class="upnext-head"><h2 id="upnext-h">How a fetch runs</h2><p>Estimate, fetch, pause, read · 4 steps</p></div>
+          <ol class="queue">
+            <li data-active><div class="q-thumb"><span class="method method-post">POST</span><code>/fetch-jobs/estimate</code><span class="badge-time">0 units</span></div><div class="q-text"><h3>Estimate the cost</h3><p>See the quota range for a channel before spending anything.</p></div></li>
+            <li><div class="q-thumb"><span class="method method-post">POST</span><code>/fetch-jobs</code><span class="badge-time">queued</span></div><div class="q-text"><h3>Start the job</h3><p>Send a URL, @handle or ID. The job ID comes back at once.</p></div></li>
+            <li><div class="q-thumb"><span class="method method-get">GET</span><code>/fetch-jobs/{job_id}</code><span class="badge-time">paused</span></div><div class="q-text"><h3>Pause and resume</h3><p>When units run out the job keeps its cursor and continues after the reset.</p></div></li>
+            <li><div class="q-thumb"><span class="method method-get">GET</span><code>/channels</code><span class="badge-time">0 units</span></div><div class="q-text"><h3>Read from storage</h3><p>Channels, videos, comments, playlists and transcripts, kept until you delete them.</p></div></li>
+          </ol>
+        </aside>
+      </section>
+
+      <section class="sec" id="data" aria-labelledby="data-h">
+        <div class="sec-head"><h2 id="data-h">What it stores</h2><p>A channel's whole public record in one Postgres store. Samples show real public data from Mubasher Lucman Official.</p></div>
+        <div class="cards">
+          <article class="card">
+            <div class="thumb"><div class="t-chan"><span class="t-av">ML</span><span><b>Mubasher Lucman Official</b><span class="t-dim">@mubasherlucmanofficial</span></span></div><div class="t-line"><span>2.43M subscribers</span><span>6,525 videos</span></div><span class="badge-time">1 unit</span></div>
+            <div class="card-row"><span class="avatar"><svg class="i"><use href="#i-channel"/></svg></span><div><h3>Channel</h3><p>Name, handle, country, creation date, totals, keywords and topics. Hidden subscriber counts stay empty, never 0.</p></div></div>
+          </article>
+          <article class="card">
+            <div class="thumb"><div class="t-line"><span>Trouble begins for the Houthis!!!</span><span>8:37</span></div><div class="t-line"><span>3.7K views · 366 likes · 17 comments</span><span>HD</span></div><div class="t-line"><span>News &amp; Politics · en-GB</span><span>long</span></div><span class="badge-time">2 units / 50</span></div>
+            <div class="card-row"><span class="avatar"><svg class="i"><use href="#i-video"/></svg></span><div><h3>Videos</h3><p>Every public upload with stats, duration, category, language, captions, live details, upload gap and a Shorts flag (heuristic).</p></div></div>
+          </article>
+          <article class="card">
+            <div class="thumb"><div class="t-com"><i></i><span><b>@IbrahimJani-f6u</b><br>Muzamil bhai sana Kon ha<br><span class="t-dim">1 like · 1 reply</span></span></div><div class="t-com"><i></i><span><b>@harun-ur-rashid382</b><br><span lang="ur" dir="rtl">دنیا میں یمن میں حوثیوں کو شکست دینے کی کوئی طاقت نہیں ہے۔</span></span></div><span class="badge-time">1 unit / 100</span></div>
+            <div class="card-row"><span class="avatar"><svg class="i"><use href="#i-comment"/></svg></span><div><h3>Comments</h3><p>Top 100 per video by relevance with every reply by default. All or none, per job.</p></div></div>
+          </article>
+          <article class="card">
+            <div class="thumb"><div class="t-line"><span><b>Motivation</b></span><span>8 videos</span></div><div class="t-line"><span>1 · If you want to be successful in life, travel.</span><span>22:09</span></div><div class="t-line"><span>2 · Mubasher Lucman speaks from hospital.</span><span>5:17</span></div><span class="badge-time">1 unit / 50</span></div>
+            <div class="card-row"><span class="avatar"><svg class="i"><use href="#i-playlist"/></svg></span><div><h3>Playlists</h3><p>Every channel playlist with its videos in order, private and deleted entries marked.</p></div></div>
+          </article>
+          <article class="card">
+            <div class="thumb"><p class="t-rtl" lang="ur">السلام علیکم ناظرین<span dir="ltr">0:00</span></p><p class="t-rtl" lang="ur">آج ہم بات کریں گے<span dir="ltr">0:03</span></p><div class="t-chips"><span>ur <b>auto-generated</b></span><span>186 segments</span></div><span class="badge-time">free</span></div>
+            <div class="card-row"><span class="avatar"><svg class="i"><use href="#i-text"/></svg></span><div><h3>Transcripts</h3><p>Timed segments and full text, manual first, then auto-generated, in English, Urdu, then Hindi.</p></div></div>
+          </article>
+          <article class="card">
+            <div class="thumb"><div class="t-chips"><span>en <b>standard</b></span><span>ur <b>asr</b></span><span>ar <b>standard</b></span><span>de <b>standard</b></span><span>es <b>standard</b></span><span>+26</span></div><span class="badge-time">50 units</span></div>
+            <div class="card-row"><span class="avatar"><svg class="i"><use href="#i-cc"/></svg></span><div><h3>Captions</h3><p>Which caption tracks a video has: languages, owner-made or auto-generated. Meant for single videos.</p></div></div>
+          </article>
+          <article class="card">
+            <div class="thumb"><div class="t-line"><span>Recent uploads</span><span>shelf 1</span></div><div class="t-shelf"><span></span><span></span><span></span></div><div class="t-line"><span>Popular uploads</span><span>shelf 2</span></div><span class="badge-time">1 unit</span></div>
+            <div class="card-row"><span class="avatar"><svg class="i"><use href="#i-shelf"/></svg></span><div><h3>Channel sections</h3><p>The shelves on a channel page: recent and popular uploads, featured playlists and channels.</p></div></div>
+          </article>
+          <article class="card">
+            <div class="thumb"><div class="t-search">mubasher lucman</div><div class="t-line"><span>1 · Trouble begins for the Houthis!!!</span><span>video</span></div><div class="t-line"><span>2 · Mubasher Lucman Official</span><span>channel</span></div><span class="badge-time">100 units</span></div>
+            <div class="card-row"><span class="avatar"><svg class="i"><use href="#i-search"/></svg></span><div><h3>Search</h3><p>Videos or channels by keyword. Any channel found can be queued for a full fetch.</p></div></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sec" id="endpoints" aria-labelledby="ep-h">
+        <div class="sec-head"><h2 id="ep-h">Endpoints</h2><p>Read live from <a href="/api-docs/openapi.json">openapi.json</a>, so the list always matches the running server. Select a route to try it in the docs.</p></div>
+        <div class="chipbar" id="chipbar" role="group" aria-label="Filter by group"><button class="chip" type="button" aria-pressed="true" data-tag="">All</button></div>
+        <p class="ep-count" id="ep-shown" aria-live="polite"></p>
+        <div class="shelves" id="shelves"><div class="empty">Loading endpoints</div></div>
+      </section>
+
+      <section class="sec" id="calling" aria-labelledby="calling-h">
+        <div class="sec-head"><h2 id="calling-h">Calling the API</h2><p>A single-owner local service: one client key, sent as a header.</p></div>
+        <div class="calling">
+          <div class="panel">
+            <h3><svg class="i"><use href="#i-key"/></svg>Send <code>X-API-Key</code></h3>
+            <div class="code">
+              <pre id="curl-snippet">curl -H "X-API-Key: $CLIENT_API_KEY"<span class="cont"> \</span>
+  http://localhost:8000/channels</pre>
+              <button class="pill" type="button" data-copy="curl-snippet"><svg class="i"><use href="#i-copy"/></svg><span>Copy</span></button>
+            </div>
+            <p>The key is <code>CLIENT_API_KEY</code> in the project's <code>.env</code>. In the docs, use <b>Authorize</b> and paste only the value. Without it, protected routes answer <code>401</code>; more than 60 requests a minute answer <code>429</code>.</p>
+            <div class="chips-row" aria-label="Open without a key">
+              <a class="chip" href="/"><code>/</code></a><a class="chip" href="/health"><code>/health</code></a><a class="chip" href="/api-docs"><code>/api-docs</code></a><a class="chip" href="/design-system"><code>/design-system</code></a>
+            </div>
+          </div>
+          <div class="panel">
+            <h3><svg class="i"><use href="#i-shield"/></svg>Ground rules</h3>
+            <ul class="rules">
+              <li><svg class="i"><use href="#i-check"/></svg><span><b>Secrets stay on the server.</b> The Google API key and proxy URL never appear in a response, log or job record.</span></li>
+              <li><svg class="i"><use href="#i-check"/></svg><span><b>Kept until you delete it.</b> Nothing expires on its own; refresh a channel to update it.</span></li>
+              <li><svg class="i"><use href="#i-check"/></svg><span><b>Honest data.</b> Shorts is a duration heuristic and labelled so; hidden counts stay empty.</span></li>
+              <li><svg class="i"><use href="#i-check"/></svg><span><b>Public data only.</b> No private analytics, growth history or writes to YouTube.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <span>Channel Analyzer API · v0.1.0 · runs locally with Docker Compose</span>
+        <span><a href="/api-docs">API docs</a> · <a href="/health">Health</a> · <a href="/design-system">Design system</a></span>
+      </footer>
+    </div>
+  </main>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const root = document.documentElement;
+
+  // Theme: system preference unless the visitor picked one
+  const systemDark = matchMedia("(prefers-color-scheme: dark)");
+  const isDark = () => (root.dataset.theme ? root.dataset.theme === "dark" : systemDark.matches);
+  function paintThemeButton() {
+    $("theme-icon").setAttribute("href", isDark() ? "#i-sun" : "#i-moon");
+    $("theme-btn").setAttribute("aria-label", isDark() ? "Switch to light theme" : "Switch to dark theme");
+  }
+  $("theme-btn").addEventListener("click", () => {
+    root.dataset.theme = isDark() ? "light" : "dark";
+    try { localStorage.setItem("theme", root.dataset.theme); } catch {}
+    paintThemeButton();
+  });
+  systemDark.addEventListener("change", paintThemeButton);
+  paintThemeButton();
+
+  // Guide drawer on narrow screens
+  const setDrawer = (open) => {
+    if (open) document.body.dataset.drawer = ""; else delete document.body.dataset.drawer;
+    $("menu-btn").setAttribute("aria-expanded", String(open));
+  };
+  $("menu-btn").addEventListener("click", () => {
+    if (matchMedia("(max-width: 1100px)").matches) setDrawer(!("drawer" in document.body.dataset));
+  });
+  $("scrim").addEventListener("click", () => setDrawer(false));
+  $("guide").addEventListener("click", (e) => { if (e.target.closest("a")) setDrawer(false); });
+  addEventListener("keydown", (e) => { if (e.key === "Escape") setDrawer(false); });
+
+  // Live health, shown as the player
+  async function checkHealth() {
+    const t0 = performance.now();
+    try {
+      const res = await fetch("/health", { cache: "no-store" });
+      const ms = Math.round(performance.now() - t0);
+      const body = await res.json();
+      const ok = res.ok && body.status === "ok";
+      const cls = (v) => (v === "ok" ? "j-ok" : "j-err");
+      $("health-out").innerHTML = `<span class="j-dim">HTTP ${res.status}</span>\n{\n  <span class="j-key">"status"</span>: <span class="${cls(body.status)}">"${esc(body.status)}"</span>,\n  <span class="j-key">"database"</span>: <span class="${cls(body.database)}">"${esc(body.database)}"</span>\n}`;
+      $("health-ms").textContent = `${ms} ms · ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
+      $("status").dataset.state = ok ? "ok" : "error";
+      $("status-text").textContent = ok ? "Online" : "Database error";
+      $("live").dataset.state = ok ? "ok" : "error";
+    } catch {
+      $("health-out").innerHTML = '<span class="j-err">No response.</span>\n<span class="j-dim">Is the api container running?</span>';
+      $("health-ms").textContent = "offline";
+      $("status").dataset.state = "error";
+      $("status-text").textContent = "Offline";
+      $("live").dataset.state = "error";
+    }
+  }
+  checkHealth();
+  setInterval(checkHealth, 15000);
+
+  // Quota day: midnight to midnight America/Los_Angeles, labelled in PKT
+  const ptClock = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  const pktHour = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Karachi", hour: "2-digit", minute: "2-digit" });
+  const pktDay = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Karachi", weekday: "short", hour: "2-digit", minute: "2-digit" });
+  const ptDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+  const pad = (n) => String(n).padStart(2, "0");
+  const hms = (s) => `${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
+  const elapsedSeconds = (now) => {
+    const p = Object.fromEntries(ptClock.formatToParts(now).map((x) => [x.type, x.value]));
+    return (Number(p.hour) % 24) * 3600 + Number(p.minute) * 60 + Number(p.second);
+  };
+  function buildTimeline() {
+    const now = new Date();
+    const start = new Date(now.getTime() - elapsedSeconds(now) * 1000);
+    $("timeline").innerHTML = Array.from({ length: 24 }, (_, h) =>
+      `<span${h % 3 === 0 ? ` data-label="${pktHour.format(new Date(start.getTime() + h * 3600000))}"` : ""}></span>`).join("");
+  }
+  function tick() {
+    const now = new Date();
+    const done = elapsedSeconds(now);
+    const left = 86400 - done;
+    const ratio = done / 86400;
+    const reset = new Date(now.getTime() + left * 1000);
+    $("elapsed").style.setProperty("--elapsed", `${(ratio * 100).toFixed(2)}%`);
+    if (ratio > 0.82) $("elapsed").dataset.flip = ""; else delete $("elapsed").dataset.flip;
+    $("now-tag").textContent = `now ${pktHour.format(now)} PKT`;
+    $("banner-reset").textContent = `Resets in ${hms(left)} · ${pktDay.format(reset)} PKT`;
+    document.querySelector(".player").style.setProperty("--elapsed-ratio", ratio.toFixed(4));
+    $("day-progress").setAttribute("aria-valuenow", Math.round(ratio * 100));
+    $("day-time").textContent = `${hms(done)} / 24:00:00`;
+    $("day-reset").textContent = `resets ${pktHour.format(reset)} PKT`;
+    $("reset-pill").textContent = `Resets in ${hms(left)}`;
+    $("reset-line").textContent = `Next reset: ${pktDay.format(reset)} PKT (${ptDay.format(reset)})`;
+  }
+  buildTimeline();
+  tick();
+  setInterval(tick, 1000);
+
+  // Endpoints from OpenAPI: guide groups, chips, shelves, masthead search
+  const ORDER = ["get", "post", "patch", "put", "delete"];
+  const initials = (tag) => tag.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  let all = [], tags = [], activeTag = "";
+  const docsLink = (e) => `/api-docs#/${encodeURIComponent(e.tag)}${e.op ? `/${encodeURIComponent(e.op)}` : ""}`;
+  function render() {
+    const term = $("ep-search").value.trim().toLowerCase();
+    const list = all.filter((e) => (!activeTag || e.tag === activeTag) && (!term || `${e.method} ${e.path} ${e.summary} ${e.tag}`.toLowerCase().includes(term)));
+    $("ep-shown").textContent = list.length === all.length ? `${all.length} routes` : `${list.length} of ${all.length} routes`;
+    if (!list.length) {
+      $("shelves").innerHTML = `<div class="empty">No route matches “${esc($("ep-search").value)}”${activeTag ? ` in ${esc(activeTag)}` : ""}. Try another word or the All chip.</div>`;
+      return;
+    }
+    const groups = tags.map((t) => [t, list.filter((e) => e.tag === t)]).filter(([, eps]) => eps.length);
+    $("shelves").innerHTML = groups.map(([tag, eps]) => `<div class="shelf"><div class="shelf-head"><span class="avatar" aria-hidden="true">${initials(tag)}</span><h3>${esc(tag)}</h3><a class="pill" href="/api-docs#/${encodeURIComponent(tag)}">Open in docs</a></div>${eps.map((e) =>
+      `<a class="ep" href="${docsLink(e)}"><span class="method method-${e.method}">${e.method.toUpperCase()}</span><code>${esc(e.path).replace(/\//g, "/<wbr>")}</code><span class="d">${esc(e.summary || "")}</span>${e.secured ? '<svg class="i lock" aria-label="Needs the client key" role="img"><use href="#i-lock"/></svg>' : "<span></span>"}</a>`).join("")}</div>`).join("");
+  }
+  function setTag(tag) {
+    activeTag = tag;
+    document.querySelectorAll("#chipbar .chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.tag === tag)));
+    render();
+  }
+  fetch("/api-docs/openapi.json").then((r) => r.json()).then((spec) => {
+    Object.entries(spec.paths || {}).forEach(([path, ops]) => Object.entries(ops).forEach(([method, op]) => {
+      if (!ORDER.includes(method)) return;
+      const tag = (op.tags || ["Other"])[0];
+      if (!tags.includes(tag)) tags.push(tag);
+      all.push({ path, method, summary: op.summary, op: op.operationId, tag, secured: (op.security || spec.security || []).length > 0 });
+    }));
+    $("ep-count").textContent = all.length;
+    $("chipbar").insertAdjacentHTML("beforeend", tags.map((t) => `<button class="chip" type="button" aria-pressed="false" data-tag="${esc(t)}">${esc(t)}</button>`).join(""));
+    $("guide-groups").innerHTML = tags.map((t) => `<a href="#endpoints" data-tag="${esc(t)}"><span class="avatar" aria-hidden="true">${initials(t)}</span><span>${esc(t)}</span><span class="n">${all.filter((e) => e.tag === t).length}</span></a>`).join("");
+    render();
+  }).catch(() => {
+    $("shelves").innerHTML = '<div class="empty">Could not load the route list. <a href="/api-docs">Open the API docs</a> instead.</div>';
+    $("guide-groups").innerHTML = '<a href="/api-docs"><span>Open the API docs</span></a>';
+  });
+  $("chipbar").addEventListener("click", (e) => { const c = e.target.closest(".chip"); if (c) setTag(c.dataset.tag); });
+  $("guide-groups").addEventListener("click", (e) => { const a = e.target.closest("[data-tag]"); if (a) setTag(a.dataset.tag); });
+  $("ep-search").addEventListener("input", render);
+  $("search-form").addEventListener("submit", (e) => { e.preventDefault(); $("endpoints").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); });
+
+  // Current section in tabs
+  const tabLinks = [...document.querySelectorAll(".tabs a")];
+  const sections = ["data", "endpoints", "calling"].map((id) => $(id));
+  const markTab = () => {
+    let current = "#top";
+    sections.forEach((s) => { if (s.getBoundingClientRect().top < innerHeight * 0.4) current = `#${s.id}`; });
+    tabLinks.forEach((a) => a.setAttribute("aria-current", String(a.getAttribute("href") === current)));
+  };
+  addEventListener("scroll", markTab, { passive: true });
+
+  // Copy buttons
+  document.querySelectorAll("[data-copy]").forEach((btn) => btn.addEventListener("click", async () => {
+    const label = btn.querySelector("span");
+    try { await navigator.clipboard.writeText($(btn.dataset.copy).textContent); label.textContent = "Copied"; }
+    catch { label.textContent = "Select and copy"; }
+    setTimeout(() => (label.textContent = "Copy"), 1600);
+  }));
+})();
+</script>
+</body>
+</html>

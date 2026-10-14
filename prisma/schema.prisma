@@ -1,0 +1,368 @@
+// Database schema for the Channel Analyzer API.
+// YouTube records keep YouTube's own IDs as primary keys; internal records use generated IDs.
+
+generator client {
+  provider             = "prisma-client-py"
+  interface            = "asyncio"
+  recursive_type_depth = 5
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TranscriptStatus {
+  pending
+  available
+  none
+  disabled
+  blocked
+  failed
+
+  @@map("transcript_status")
+}
+
+enum FetchJobType {
+  full_fetch
+  stats_refresh
+  full_refresh
+
+  @@map("fetch_job_type")
+}
+
+enum CommentMode {
+  top_100
+  all
+  skip
+
+  @@map("comment_mode")
+}
+
+enum FetchJobStatus {
+  queued
+  running
+  paused_for_quota
+  completed
+  failed
+  cancelled
+
+  @@map("fetch_job_status")
+}
+
+enum FetchJobStage {
+  channel
+  videos
+  comments
+  playlists
+  transcripts
+
+  @@map("fetch_job_stage")
+}
+
+enum TranscriptStepStatus {
+  not_requested
+  pending
+  running
+  done
+  partial
+  blocked
+
+  @@map("transcript_step_status")
+}
+
+enum SearchType {
+  video
+  channel
+
+  @@map("search_type")
+}
+
+model Channel {
+  id                    String    @id
+  title                 String
+  description           String?
+  customUrl             String?   @map("custom_url")
+  country               String?
+  publishedAt           DateTime? @map("published_at") @db.Timestamptz(3)
+  subscriberCount       BigInt?   @map("subscriber_count")
+  subscriberCountHidden Boolean   @default(false) @map("subscriber_count_hidden")
+  viewCount             BigInt?   @map("view_count")
+  videoCount            Int?      @map("video_count")
+  keywords              String[]
+  topicCategories       String[]  @map("topic_categories")
+  uploadsPlaylistId     String?   @map("uploads_playlist_id")
+  tracked               Boolean   @default(false)
+  fetchedAt             DateTime  @map("fetched_at") @db.Timestamptz(3)
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  videos    Video[]
+  playlists Playlist[]
+  fetchJobs FetchJob[]
+  sections  ChannelSection[]
+
+  @@index([fetchedAt])
+  @@map("channels")
+}
+
+model Video {
+  id                   String           @id
+  channelId            String           @map("channel_id")
+  title                String
+  description          String?
+  tags                 String[]
+  publishedAt          DateTime         @map("published_at") @db.Timestamptz(3)
+  durationIso          String?          @map("duration_iso")
+  durationSeconds      Int?             @map("duration_seconds")
+  isShort              Boolean          @default(false) @map("is_short")
+  uploadGapSeconds     BigInt?          @map("upload_gap_seconds")
+  viewCount            BigInt?          @map("view_count")
+  likeCount            BigInt?          @map("like_count")
+  commentCount         BigInt?          @map("comment_count")
+  categoryId           String?          @map("category_id")
+  categoryName         String?          @map("category_name")
+  defaultLanguage      String?          @map("default_language")
+  defaultAudioLanguage String?          @map("default_audio_language")
+  definition           String?
+  captionsAvailable    Boolean?         @map("captions_available")
+  madeForKids          Boolean?         @map("made_for_kids")
+  liveScheduledStartAt DateTime?        @map("live_scheduled_start_at") @db.Timestamptz(3)
+  liveActualStartAt    DateTime?        @map("live_actual_start_at") @db.Timestamptz(3)
+  liveActualEndAt      DateTime?        @map("live_actual_end_at") @db.Timestamptz(3)
+  transcriptStatus     TranscriptStatus @default(pending) @map("transcript_status")
+  fetchedAt            DateTime         @map("fetched_at") @db.Timestamptz(3)
+  createdAt            DateTime         @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime         @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  channel       Channel        @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  comments      Comment[]
+  transcript    Transcript?
+  captionTracks CaptionTrack[]
+
+  @@index([channelId, publishedAt])
+  @@index([fetchedAt])
+  @@map("videos")
+}
+
+model Comment {
+  id                String    @id
+  videoId           String    @map("video_id")
+  parentId          String?   @map("parent_id")
+  text              String
+  authorDisplayName String?   @map("author_display_name")
+  authorChannelId   String?   @map("author_channel_id")
+  likeCount         Int       @default(0) @map("like_count")
+  totalReplyCount   Int?      @map("total_reply_count")
+  publishedAt       DateTime  @map("published_at") @db.Timestamptz(3)
+  editedAt          DateTime? @map("edited_at") @db.Timestamptz(3)
+  fetchedAt         DateTime  @map("fetched_at") @db.Timestamptz(3)
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  video   Video     @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Comment[] @relation("CommentReplies")
+
+  @@index([videoId])
+  @@index([parentId])
+  @@map("video_comments")
+}
+
+model CaptionTrack {
+  id             String    @id
+  videoId        String    @map("video_id")
+  language       String
+  name           String?
+  trackKind      String    @map("track_kind")
+  audioTrackType String?   @map("audio_track_type")
+  isCc           Boolean?  @map("is_cc")
+  isLarge        Boolean?  @map("is_large")
+  isEasyReader   Boolean?  @map("is_easy_reader")
+  isDraft        Boolean?  @map("is_draft")
+  isAutoSynced   Boolean?  @map("is_auto_synced")
+  status         String?
+  failureReason  String?   @map("failure_reason")
+  lastUpdated    DateTime? @map("last_updated") @db.Timestamptz(3)
+  fetchedAt      DateTime  @map("fetched_at") @db.Timestamptz(3)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@index([videoId])
+  @@map("video_caption_tracks")
+}
+
+model VideoCategory {
+  id         String   @id
+  title      String
+  assignable Boolean
+  channelId  String?  @map("channel_id")
+  regionCode String   @map("region_code")
+  language   String
+  fetchedAt  DateTime @map("fetched_at") @db.Timestamptz(3)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("video_categories")
+}
+
+model ChannelSection {
+  id          String   @id
+  channelId   String   @map("channel_id")
+  type        String
+  title       String?
+  position    Int
+  playlistIds String[] @map("playlist_ids")
+  channelIds  String[] @map("channel_ids")
+  fetchedAt   DateTime @map("fetched_at") @db.Timestamptz(3)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  @@index([channelId])
+  @@map("channel_sections")
+}
+
+model Playlist {
+  id          String    @id
+  channelId   String    @map("channel_id")
+  title       String
+  description String?
+  publishedAt DateTime? @map("published_at") @db.Timestamptz(3)
+  itemCount   Int?      @map("item_count")
+  fetchedAt   DateTime  @map("fetched_at") @db.Timestamptz(3)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  channel Channel        @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  items   PlaylistItem[]
+
+  @@index([channelId])
+  @@map("playlists")
+}
+
+// Video ID is not a foreign key: a playlist can list private, deleted or other channels' videos (R-17).
+model PlaylistItem {
+  id             String   @id
+  playlistId     String   @map("playlist_id")
+  videoId        String   @map("video_id")
+  position       Int
+  videoAvailable Boolean  @default(true) @map("video_available")
+  fetchedAt      DateTime @map("fetched_at") @db.Timestamptz(3)
+
+  playlist Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+
+  @@index([playlistId, position])
+  @@index([videoId])
+  @@map("playlist_items")
+}
+
+model Transcript {
+  id           Int              @id @default(autoincrement())
+  videoId      String           @unique @map("video_id")
+  status       TranscriptStatus @default(pending)
+  languageCode String?          @map("language_code")
+  languageName String?          @map("language_name")
+  isGenerated  Boolean?         @map("is_generated")
+  fullText     String?          @map("full_text")
+  segmentCount Int              @default(0) @map("segment_count")
+  attemptCount Int              @default(0) @map("attempt_count")
+  lastError    String?          @map("last_error")
+  fetchedAt    DateTime?        @map("fetched_at") @db.Timestamptz(3)
+  createdAt    DateTime         @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime         @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  video    Video               @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  segments TranscriptSegment[]
+
+  @@map("video_transcripts")
+}
+
+model TranscriptSegment {
+  id              BigInt @id @default(autoincrement())
+  transcriptId    Int    @map("transcript_id")
+  position        Int
+  startSeconds    Float  @map("start_seconds")
+  durationSeconds Float  @map("duration_seconds")
+  text            String
+
+  transcript Transcript @relation(fields: [transcriptId], references: [id], onDelete: Cascade)
+
+  @@unique([transcriptId, position])
+  @@map("video_transcript_segments")
+}
+
+model FetchJob {
+  id                   Int                  @id @default(autoincrement())
+  channelInput         String               @map("channel_input")
+  channelId            String?              @map("channel_id")
+  type                 FetchJobType         @default(full_fetch)
+  commentMode          CommentMode          @default(top_100) @map("comment_mode")
+  status               FetchJobStatus       @default(queued)
+  stage                FetchJobStage?
+  transcriptsRequested Boolean              @default(false) @map("transcripts_requested")
+  transcriptStepStatus TranscriptStepStatus @default(not_requested) @map("transcript_step_status")
+  videosFound          Int                  @default(0) @map("videos_found")
+  videosDone           Int                  @default(0) @map("videos_done")
+  commentsFetched      Int                  @default(0) @map("comments_fetched")
+  playlistsDone        Int                  @default(0) @map("playlists_done")
+  transcriptsDone      Int                  @default(0) @map("transcripts_done")
+  transcriptsMissing   Int                  @default(0) @map("transcripts_missing")
+  transcriptsBlocked   Int                  @default(0) @map("transcripts_blocked")
+  resumeCursor         Json?                @map("resume_cursor")
+  quotaSpent           Int                  @default(0) @map("quota_spent")
+  errorDetail          String?              @map("error_detail")
+  startedAt            DateTime?            @map("started_at") @db.Timestamptz(3)
+  finishedAt           DateTime?            @map("finished_at") @db.Timestamptz(3)
+  createdAt            DateTime             @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime             @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  channel Channel? @relation(fields: [channelId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([channelId])
+  @@map("fetch_jobs")
+}
+
+// Quota day is the Pacific time calendar day (R-2).
+model QuotaUsage {
+  quotaDay        DateTime @map("quota_day") @db.Date
+  googleProjectId String   @default("default") @map("google_project_id")
+  unitsSpent      Int      @default(0) @map("units_spent")
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@id([quotaDay, googleProjectId])
+  @@map("quota_usage")
+}
+
+model SearchQuery {
+  id         Int        @id @default(autoincrement())
+  keyword    String
+  type       SearchType
+  filters    Json?
+  quotaSpent Int        @default(0) @map("quota_spent")
+  fetchedAt  DateTime   @map("fetched_at") @db.Timestamptz(3)
+  createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  results SearchResult[]
+
+  @@index([fetchedAt])
+  @@map("search_queries")
+}
+
+model SearchResult {
+  id            Int        @id @default(autoincrement())
+  searchQueryId Int        @map("search_query_id")
+  rank          Int
+  resultType    SearchType @map("result_type")
+  videoId       String?    @map("video_id")
+  channelId     String?    @map("channel_id")
+  title         String?
+
+  searchQuery SearchQuery @relation(fields: [searchQueryId], references: [id], onDelete: Cascade)
+
+  @@unique([searchQueryId, rank])
+  @@map("search_results")
+}

@@ -1,0 +1,288 @@
+/* Design tokens. Visual reference: youtube.com (grounds, chips, pill controls, Roboto, one red for live state
+   and time). No YouTube logo or brand asset is used. Dark is the default; light follows the system preference
+   or [data-theme="light"] on any element. Every colour is hex. */
+
+:root,
+[data-theme="dark"] {
+  /* Ground and surfaces */
+  --bg: #0F0F0F;
+  --bg-raised: #212121;
+  --bg-sunken: #000000;
+  --chip: #272727;
+  --chip-hover: #3F3F3F;
+  --chip-active: #F1F1F1;
+  --on-chip-active: #0F0F0F;
+  --line: #3F3F3F;
+  --line-soft: #272727;
+
+  /* Text */
+  --text: #F1F1F1;
+  --text-2: #AAAAAA;
+  --text-3: #717171;
+  --link: #3EA6FF;
+
+  /* Signal: red is for live state and elapsed time only, never for decoration */
+  --red: #FF0033;
+  --red-text: #FF4E45;
+  --red-soft: #3A0A0F;
+
+  /* Status */
+  --ok: #2BA640;
+  --ok-soft: #0E2A14;
+  --warn: #F7B500;
+  --warn-soft: #3A2C00;
+  --error: #FF4E45;
+
+  /* HTTP methods */
+  --m-get: #3EA6FF;
+  --m-get-soft: #0B2741;
+  --m-post: #3DD068;
+  --m-post-soft: #0E2A14;
+  --m-patch: #F7B500;
+  --m-patch-soft: #3A2C00;
+  --m-delete: #FF4E45;
+  --m-delete-soft: #3A0A0F;
+
+  /* Overlays (thumbnail badges, scrims) */
+  --scrim: #000000CC;
+  --on-scrim: #FFFFFF;
+  --hover-veil: #FFFFFF1A;
+
+  /* Type */
+  --font: "Roboto", "Arial", sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --fs-display: 36px;
+  --fs-title: 20px;
+  --fs-card: 16px;
+  --fs-body: 14px;
+  --fs-meta: 12px;
+  --lh-display: 44px;
+  --lh-title: 28px;
+  --lh-card: 22px;
+  --lh-body: 20px;
+  --lh-meta: 18px;
+
+  /* Shape and spacing (4px base) */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --r-chip: 8px;
+  --r-guide: 10px;
+  --r-card: 12px;
+  --r-banner: 16px;
+  --r-pill: 999px;
+  --masthead-h: 56px;
+  --guide-w: 240px;
+  --control-h: 36px;
+  --chip-h: 32px;
+
+  /* Elevation: only menus and drawers float */
+  --shadow-menu: 0 4px 32px 0 #0000001A;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: 120ms;
+  --t-base: 200ms;
+  --t-slow: 900ms;
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #FFFFFF;
+    --bg-raised: #FFFFFF;
+    --bg-sunken: #F9F9F9;
+    --chip: #F2F2F2;
+    --chip-hover: #E5E5E5;
+    --chip-active: #0F0F0F;
+    --on-chip-active: #FFFFFF;
+    --line: #E5E5E5;
+    --line-soft: #F2F2F2;
+    --text: #0F0F0F;
+    --text-2: #606060;
+    --text-3: #757575;
+    --link: #065FD4;
+    --red-text: #CC0000;
+    --red-soft: #FFE5E9;
+    --ok: #107516;
+    --ok-soft: #E3F4E5;
+    --warn: #8A5A00;
+    --warn-soft: #FFF3D6;
+    --error: #CC0000;
+    --m-get: #065FD4;
+    --m-get-soft: #DEF1FF;
+    --m-post: #107516;
+    --m-post-soft: #E3F4E5;
+    --m-patch: #8A5A00;
+    --m-patch-soft: #FFF3D6;
+    --m-delete: #CC0000;
+    --m-delete-soft: #FFE5E9;
+    --hover-veil: #0000000D;
+    color-scheme: light;
+  }
+}
+
+[data-theme="light"] {
+  --bg: #FFFFFF;
+  --bg-raised: #FFFFFF;
+  --bg-sunken: #F9F9F9;
+  --chip: #F2F2F2;
+  --chip-hover: #E5E5E5;
+  --chip-active: #0F0F0F;
+  --on-chip-active: #FFFFFF;
+  --line: #E5E5E5;
+  --line-soft: #F2F2F2;
+  --text: #0F0F0F;
+  --text-2: #606060;
+  --text-3: #757575;
+  --link: #065FD4;
+  --red-text: #CC0000;
+  --red-soft: #FFE5E9;
+  --ok: #107516;
+  --ok-soft: #E3F4E5;
+  --warn: #8A5A00;
+  --warn-soft: #FFF3D6;
+  --error: #CC0000;
+  --m-get: #065FD4;
+  --m-get-soft: #DEF1FF;
+  --m-post: #107516;
+  --m-post-soft: #E3F4E5;
+  --m-patch: #8A5A00;
+  --m-patch-soft: #FFF3D6;
+  --m-delete: #CC0000;
+  --m-delete-soft: #FFE5E9;
+  --hover-veil: #0000000D;
+  color-scheme: light;
+}
+
+/* Shared components. Pages opt in with these class names. */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  height: var(--control-h);
+  padding: 0 var(--s-4);
+  border: 0;
+  border-radius: var(--r-pill);
+  font: 500 var(--fs-body) / var(--control-h) var(--font);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  background: var(--chip);
+  color: var(--text);
+  transition: background-color var(--t-fast) linear;
+}
+.pill:hover { background: var(--chip-hover); }
+.pill svg { width: 20px; height: 20px; flex: none; }
+.pill-primary { background: var(--text); color: var(--bg); }
+.pill-primary:hover { background: var(--text-2); }
+.pill-outline { background: transparent; border: 1px solid var(--line); color: var(--link); }
+.pill-outline:hover { background: var(--m-get-soft); border-color: transparent; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--chip-h);
+  padding: 0 var(--s-3);
+  border: 0;
+  border-radius: var(--r-chip);
+  font: 500 var(--fs-body) / 1 var(--font);
+  white-space: nowrap;
+  cursor: pointer;
+  background: var(--chip);
+  color: var(--text);
+  text-decoration: none;
+  transition: background-color var(--t-fast) linear;
+}
+.chip:hover { background: var(--chip-hover); }
+.chip[aria-pressed="true"],
+.chip[aria-current="true"] { background: var(--chip-active); color: var(--on-chip-active); }
+
+.method {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 4px;
+  font: 700 11px / 1 var(--font-mono);
+  letter-spacing: 0.02em;
+}
+.method-get { color: var(--m-get); background: var(--m-get-soft); }
+.method-post { color: var(--m-post); background: var(--m-post-soft); }
+.method-patch, .method-put { color: var(--m-patch); background: var(--m-patch-soft); }
+.method-delete { color: var(--m-delete); background: var(--m-delete-soft); }
+
+.badge-time {
+  position: absolute;
+  right: var(--s-2);
+  bottom: var(--s-2);
+  padding: 1px var(--s-1);
+  border-radius: 4px;
+  background: var(--scrim);
+  color: var(--on-scrim);
+  font: 500 var(--fs-meta) / var(--lh-meta) var(--font);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--chip);
+  color: var(--text);
+  font: 500 var(--fs-body) / 1 var(--font);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 var(--s-3) 0 10px;
+  border-radius: var(--r-pill);
+  background: var(--chip);
+  color: var(--text);
+  font: 500 var(--fs-meta) / 1 var(--font);
+}
+.status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-3);
+}
+.status[data-state="ok"]::before { background: var(--ok); }
+.status[data-state="error"]::before { background: var(--red); }
+
+.progress {
+  position: relative;
+  height: 3px;
+  background: #FFFFFF33;
+}
+.progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100%;
+  background: var(--red);
+  transform-origin: left center;
+}
+.progress-dot {
+  position: absolute;
+  top: 50%;
+  width: 13px;
+  height: 13px;
+  margin: -6.5px 0 0 -6.5px;
+  border-radius: 50%;
+  background: var(--red);
+}

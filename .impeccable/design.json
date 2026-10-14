@@ -1,0 +1,1054 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-05T11:27:06+00:00",
+  "title": "Design System: Channel Analyzer API",
+  "extensions": {
+    "colorMeta": {
+      "bg": {
+        "role": "neutral",
+        "displayName": "Night Ground",
+        "canonical": "#0F0F0F",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "bg-raised": {
+        "role": "neutral",
+        "displayName": "Raised Ground",
+        "canonical": "#212121",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "bg-sunken": {
+        "role": "neutral",
+        "displayName": "Sunken Ground",
+        "canonical": "#000000",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "chip": {
+        "role": "neutral",
+        "displayName": "Chip Grey",
+        "canonical": "#272727",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "chip-hover": {
+        "role": "neutral",
+        "displayName": "Chip Hover Grey",
+        "canonical": "#3F3F3F",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "chip-active": {
+        "role": "neutral",
+        "displayName": "Selected Fill",
+        "canonical": "#F1F1F1",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "on-chip-active": {
+        "role": "neutral",
+        "displayName": "Selected Label",
+        "canonical": "#0F0F0F",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#3F3F3F",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "line-soft": {
+        "role": "neutral",
+        "displayName": "Soft Hairline",
+        "canonical": "#272727",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Primary Text",
+        "canonical": "#F1F1F1",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "text-2": {
+        "role": "neutral",
+        "displayName": "Secondary Text",
+        "canonical": "#AAAAAA",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "text-3": {
+        "role": "neutral",
+        "displayName": "Tertiary Text",
+        "canonical": "#717171",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "link": {
+        "role": "secondary",
+        "displayName": "Link Blue",
+        "canonical": "#3EA6FF",
+        "tonalRamp": [
+          "#00294C",
+          "#004785",
+          "#0066BD",
+          "#0084F5",
+          "#2E9FFF",
+          "#66B8FF",
+          "#A3D5FF",
+          "#E5F3FF"
+        ]
+      },
+      "red": {
+        "role": "primary",
+        "displayName": "Live Red",
+        "canonical": "#FF0033",
+        "tonalRamp": [
+          "#4C000F",
+          "#85001B",
+          "#BD0026",
+          "#F50031",
+          "#FF2E58",
+          "#FF6685",
+          "#FFA3B6",
+          "#FFE5EB"
+        ]
+      },
+      "red-text": {
+        "role": "primary",
+        "displayName": "Red Text",
+        "canonical": "#FF4E45",
+        "tonalRamp": [
+          "#4C0400",
+          "#850600",
+          "#BD0900",
+          "#F50C00",
+          "#FF382E",
+          "#FF6D66",
+          "#FFA8A3",
+          "#FFE7E5"
+        ]
+      },
+      "red-soft": {
+        "role": "primary",
+        "displayName": "Elapsed Wash",
+        "canonical": "#3A0A0F",
+        "tonalRamp": [
+          "#410B11",
+          "#71131D",
+          "#A11C2A",
+          "#D12436",
+          "#E04D5C",
+          "#E87D88",
+          "#F2B1B7",
+          "#FBE9EB"
+        ]
+      },
+      "now-tag": {
+        "role": "primary",
+        "displayName": "Now Tag Red",
+        "canonical": "#CC0029",
+        "tonalRamp": [
+          "#4C000F",
+          "#85001B",
+          "#BD0026",
+          "#F50031",
+          "#FF2E58",
+          "#FF6685",
+          "#FFA3B6",
+          "#FFE5EB"
+        ]
+      },
+      "ok": {
+        "role": "status",
+        "displayName": "OK Green",
+        "canonical": "#2BA640",
+        "tonalRamp": [
+          "#103D17",
+          "#1B6929",
+          "#27963A",
+          "#32C24B",
+          "#59D46E",
+          "#85E095",
+          "#B6ECBF",
+          "#EBFAED"
+        ]
+      },
+      "ok-soft": {
+        "role": "status",
+        "displayName": "OK Wash",
+        "canonical": "#0E2A14",
+        "tonalRamp": [
+          "#13391B",
+          "#21632F",
+          "#2F8E43",
+          "#3DB857",
+          "#62CB79",
+          "#8CD99D",
+          "#BAE8C4",
+          "#ECF9EF"
+        ]
+      },
+      "warn": {
+        "role": "status",
+        "displayName": "Warn Amber",
+        "canonical": "#F7B500",
+        "tonalRamp": [
+          "#4C3800",
+          "#856100",
+          "#BD8A00",
+          "#F5B300",
+          "#FFC72E",
+          "#FFD666",
+          "#FFE6A3",
+          "#FFF8E5"
+        ]
+      },
+      "warn-soft": {
+        "role": "status",
+        "displayName": "Warn Wash",
+        "canonical": "#3A2C00",
+        "tonalRamp": [
+          "#4C3A00",
+          "#856500",
+          "#BD8F00",
+          "#F5BA00",
+          "#FFCD2E",
+          "#FFDA66",
+          "#FFE9A3",
+          "#FFF9E5"
+        ]
+      },
+      "error": {
+        "role": "status",
+        "displayName": "Error",
+        "canonical": "#FF4E45",
+        "tonalRamp": [
+          "#4C0400",
+          "#850600",
+          "#BD0900",
+          "#F50C00",
+          "#FF382E",
+          "#FF6D66",
+          "#FFA8A3",
+          "#FFE7E5"
+        ]
+      },
+      "m-get": {
+        "role": "method",
+        "displayName": "GET Blue",
+        "canonical": "#3EA6FF",
+        "tonalRamp": [
+          "#00294C",
+          "#004785",
+          "#0066BD",
+          "#0084F5",
+          "#2E9FFF",
+          "#66B8FF",
+          "#A3D5FF",
+          "#E5F3FF"
+        ]
+      },
+      "m-get-soft": {
+        "role": "method",
+        "displayName": "GET Wash",
+        "canonical": "#0B2741",
+        "tonalRamp": [
+          "#0B2741",
+          "#134471",
+          "#1B61A1",
+          "#237ED1",
+          "#4C99E1",
+          "#7CB5E9",
+          "#B0D2F2",
+          "#E9F3FB"
+        ]
+      },
+      "m-post": {
+        "role": "method",
+        "displayName": "POST Green",
+        "canonical": "#3DD068",
+        "tonalRamp": [
+          "#0F3E1D",
+          "#1A6B32",
+          "#259846",
+          "#30C55B",
+          "#57D67C",
+          "#84E19F",
+          "#B5EDC5",
+          "#EAFAEF"
+        ]
+      },
+      "m-post-soft": {
+        "role": "method",
+        "displayName": "POST Wash",
+        "canonical": "#0E2A14",
+        "tonalRamp": [
+          "#13391B",
+          "#21632F",
+          "#2F8E43",
+          "#3DB857",
+          "#62CB79",
+          "#8CD99D",
+          "#BAE8C4",
+          "#ECF9EF"
+        ]
+      },
+      "m-patch": {
+        "role": "method",
+        "displayName": "PATCH and PUT Amber",
+        "canonical": "#F7B500",
+        "tonalRamp": [
+          "#4C3800",
+          "#856100",
+          "#BD8A00",
+          "#F5B300",
+          "#FFC72E",
+          "#FFD666",
+          "#FFE6A3",
+          "#FFF8E5"
+        ]
+      },
+      "m-patch-soft": {
+        "role": "method",
+        "displayName": "PATCH Wash",
+        "canonical": "#3A2C00",
+        "tonalRamp": [
+          "#4C3A00",
+          "#856500",
+          "#BD8F00",
+          "#F5BA00",
+          "#FFCD2E",
+          "#FFDA66",
+          "#FFE9A3",
+          "#FFF9E5"
+        ]
+      },
+      "m-delete": {
+        "role": "method",
+        "displayName": "DELETE Red-Orange",
+        "canonical": "#FF4E45",
+        "tonalRamp": [
+          "#4C0400",
+          "#850600",
+          "#BD0900",
+          "#F50C00",
+          "#FF382E",
+          "#FF6D66",
+          "#FFA8A3",
+          "#FFE7E5"
+        ]
+      },
+      "m-delete-soft": {
+        "role": "method",
+        "displayName": "DELETE Wash",
+        "canonical": "#3A0A0F",
+        "tonalRamp": [
+          "#410B11",
+          "#71131D",
+          "#A11C2A",
+          "#D12436",
+          "#E04D5C",
+          "#E87D88",
+          "#F2B1B7",
+          "#FBE9EB"
+        ]
+      },
+      "scrim": {
+        "role": "overlay",
+        "displayName": "Badge Scrim",
+        "canonical": "#000000CC",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "on-scrim": {
+        "role": "overlay",
+        "displayName": "Badge Label",
+        "canonical": "#FFFFFF",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "drawer-scrim": {
+        "role": "overlay",
+        "displayName": "Drawer Scrim",
+        "canonical": "#00000080",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "bg-light": {
+        "role": "neutral",
+        "displayName": "Night Ground (light)",
+        "canonical": "#FFFFFF",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "bg-raised-light": {
+        "role": "neutral",
+        "displayName": "Raised Ground (light)",
+        "canonical": "#FFFFFF",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "bg-sunken-light": {
+        "role": "neutral",
+        "displayName": "Sunken Ground (light)",
+        "canonical": "#F9F9F9",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "chip-light": {
+        "role": "neutral",
+        "displayName": "Chip Grey (light)",
+        "canonical": "#F2F2F2",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "chip-hover-light": {
+        "role": "neutral",
+        "displayName": "Chip Hover Grey (light)",
+        "canonical": "#E5E5E5",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "chip-active-light": {
+        "role": "neutral",
+        "displayName": "Selected Fill (light)",
+        "canonical": "#0F0F0F",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "on-chip-active-light": {
+        "role": "neutral",
+        "displayName": "Selected Label (light)",
+        "canonical": "#FFFFFF",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "line-light": {
+        "role": "neutral",
+        "displayName": "Hairline (light)",
+        "canonical": "#E5E5E5",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "line-soft-light": {
+        "role": "neutral",
+        "displayName": "Soft Hairline (light)",
+        "canonical": "#F2F2F2",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "text-light": {
+        "role": "neutral",
+        "displayName": "Primary Text (light)",
+        "canonical": "#0F0F0F",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "text-2-light": {
+        "role": "neutral",
+        "displayName": "Secondary Text (light)",
+        "canonical": "#606060",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "text-3-light": {
+        "role": "neutral",
+        "displayName": "Tertiary Text (light)",
+        "canonical": "#757575",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#969696",
+          "#B2B2B2",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "link-light": {
+        "role": "secondary",
+        "displayName": "Link Blue (light)",
+        "canonical": "#065FD4",
+        "tonalRamp": [
+          "#02214A",
+          "#043A81",
+          "#0552B8",
+          "#076BEE",
+          "#3489F9",
+          "#6AA9FB",
+          "#A6CBFC",
+          "#E6F1FE"
+        ]
+      },
+      "red-text-light": {
+        "role": "primary",
+        "displayName": "Red Text (light)",
+        "canonical": "#CC0000",
+        "tonalRamp": [
+          "#4C0000",
+          "#850000",
+          "#BD0000",
+          "#F50000",
+          "#FF2E2E",
+          "#FF6666",
+          "#FFA3A3",
+          "#FFE5E5"
+        ]
+      },
+      "red-soft-light": {
+        "role": "primary",
+        "displayName": "Elapsed Wash (light)",
+        "canonical": "#FFE5E9",
+        "tonalRamp": [
+          "#4C000C",
+          "#850014",
+          "#BD001D",
+          "#F50026",
+          "#FF2E4E",
+          "#FF667E",
+          "#FFA3B1",
+          "#FFE5E9"
+        ]
+      },
+      "ok-light": {
+        "role": "status",
+        "displayName": "OK Green (light)",
+        "canonical": "#107516",
+        "tonalRamp": [
+          "#09430D",
+          "#107516",
+          "#17A61F",
+          "#1DD728",
+          "#47E650",
+          "#78ED7F",
+          "#AEF4B2",
+          "#E9FCEA"
+        ]
+      },
+      "ok-soft-light": {
+        "role": "status",
+        "displayName": "OK Wash (light)",
+        "canonical": "#E3F4E5",
+        "tonalRamp": [
+          "#16371A",
+          "#255F2C",
+          "#35873F",
+          "#45B052",
+          "#69C474",
+          "#91D499",
+          "#BDE5C2",
+          "#EDF8EE"
+        ]
+      },
+      "warn-light": {
+        "role": "status",
+        "displayName": "Warn Amber (light)",
+        "canonical": "#8A5A00",
+        "tonalRamp": [
+          "#4C3200",
+          "#855600",
+          "#BD7B00",
+          "#F5A000",
+          "#FFB62E",
+          "#FFCA66",
+          "#FFDFA3",
+          "#FFF6E5"
+        ]
+      },
+      "warn-soft-light": {
+        "role": "status",
+        "displayName": "Warn Wash (light)",
+        "canonical": "#FFF3D6",
+        "tonalRamp": [
+          "#4C3600",
+          "#855E00",
+          "#BD8500",
+          "#F5AD00",
+          "#FFC22E",
+          "#FFD266",
+          "#FFE4A3",
+          "#FFF8E5"
+        ]
+      },
+      "error-light": {
+        "role": "status",
+        "displayName": "Error (light)",
+        "canonical": "#CC0000",
+        "tonalRamp": [
+          "#4C0000",
+          "#850000",
+          "#BD0000",
+          "#F50000",
+          "#FF2E2E",
+          "#FF6666",
+          "#FFA3A3",
+          "#FFE5E5"
+        ]
+      },
+      "m-get-soft-light": {
+        "role": "method",
+        "displayName": "GET Wash (light)",
+        "canonical": "#DEF1FF",
+        "tonalRamp": [
+          "#002C4C",
+          "#004C85",
+          "#006DBD",
+          "#008DF5",
+          "#2EA6FF",
+          "#66BEFF",
+          "#A3D8FF",
+          "#E5F4FF"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Channel name only; 24px/32px below 760px."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Section headings, watch title, Up next heading, banner caption."
+      },
+      "card": {
+        "displayName": "Card",
+        "purpose": "Card titles and panel headings; shelf headings at 700; tabs at 500."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text, descriptions capped at 72 to 80ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Pill and chip text, guide labels, queue titles."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Meta lines, counts, footers, badges."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Inline code, curl snippets, tabular cost numbers, player JSON."
+      },
+      "method": {
+        "displayName": "Method",
+        "purpose": "HTTP verb badges."
+      }
+    },
+    "shadows": [
+      {
+        "name": "shadow-menu",
+        "value": "0 4px 32px 0 #0000001A",
+        "purpose": "Menus and drawers only: the guide drawer at 1100px and below."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "All transitions."
+      },
+      {
+        "name": "t-fast",
+        "value": "120ms",
+        "purpose": "Hover fills on pills and chips."
+      },
+      {
+        "name": "t-base",
+        "value": "200ms",
+        "purpose": "Drawer slide, thumbnail corner change."
+      },
+      {
+        "name": "t-slow",
+        "value": "900ms",
+        "purpose": "Quota-day progress fill and scrub dot."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "none",
+        "purpose": "prefers-reduced-motion removes every transition and animation."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide",
+        "value": "1312px"
+      },
+      {
+        "name": "drawer",
+        "value": "1100px"
+      },
+      {
+        "name": "compact",
+        "value": "760px"
+      },
+      {
+        "name": "docs-stack",
+        "value": "900px"
+      },
+      {
+        "name": "docs-compact",
+        "value": "560px"
+      }
+    ],
+    "zIndex": [
+      {
+        "name": "masthead",
+        "value": 20
+      },
+      {
+        "name": "drawer-scrim",
+        "value": 30
+      },
+      {
+        "name": "drawer",
+        "value": 40
+      },
+      {
+        "name": "skip-link",
+        "value": 50
+      }
+    ],
+    "themes": {
+      "default": "dark",
+      "light": "prefers-color-scheme: light, or [data-theme=\"light\"] on any element; light values are the -light colour keys. The docs page pins light."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Pill",
+      "kind": "button",
+      "refersTo": "pill-primary",
+      "description": "The one main action in a block: text-colour fill, ground-colour label.",
+      "html": "<button class=\"ds-pill ds-pill-primary\" type=\"button\">Open API docs</button>",
+      "css": ".ds-pill { display:inline-flex; align-items:center; gap:8px; height:36px; padding:0 16px; border:0; border-radius:999px; font:500 14px/36px Roboto, Arial, sans-serif; cursor:pointer; transition:background-color 120ms linear; } .ds-pill-primary { background:var(--text, #F1F1F1); color:var(--bg, #0F0F0F); } .ds-pill-primary:hover { background:var(--text-2, #AAAAAA); } .ds-pill:focus-visible { outline:2px solid var(--link, #3EA6FF); outline-offset:2px; }"
+    },
+    {
+      "name": "Pill",
+      "kind": "button",
+      "refersTo": "pill",
+      "description": "Secondary actions and copy buttons: Chip Grey pill.",
+      "html": "<button class=\"ds-pill2\" type=\"button\"><svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"9\" y=\"9\" width=\"11\" height=\"11\" rx=\"2\"/><path d=\"M5 15V6a2 2 0 0 1 2-2h9\"/></svg><span>Copy</span></button>",
+      "css": ".ds-pill2 { display:inline-flex; align-items:center; gap:8px; height:36px; padding:0 16px; border:0; border-radius:999px; font:500 14px/36px Roboto, Arial, sans-serif; cursor:pointer; background:var(--chip, #272727); color:var(--text, #F1F1F1); transition:background-color 120ms linear; } .ds-pill2:hover { background:var(--chip-hover, #3F3F3F); } .ds-pill2:focus-visible { outline:2px solid var(--link, #3EA6FF); outline-offset:2px; }"
+    },
+    {
+      "name": "Outline Pill",
+      "kind": "button",
+      "refersTo": "pill-outline",
+      "description": "Masthead link out to the docs: hairline border, Link Blue label.",
+      "html": "<a class=\"ds-pill-outline\" href=\"#\">Docs</a>",
+      "css": ".ds-pill-outline { display:inline-flex; align-items:center; height:36px; padding:0 16px; border:1px solid var(--line, #3F3F3F); border-radius:999px; background:transparent; color:var(--link, #3EA6FF); font:500 14px/36px Roboto, Arial, sans-serif; text-decoration:none; transition:background-color 120ms linear; } .ds-pill-outline:hover { background:var(--m-get-soft, #0B2741); border-color:transparent; } .ds-pill-outline:focus-visible { outline:2px solid var(--link, #3EA6FF); outline-offset:2px; }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Filters and jump links; selected state inverts.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">All</button><button class=\"ds-chip\" aria-pressed=\"false\">Fetch jobs</button><button class=\"ds-chip\" aria-pressed=\"false\">Transcripts</button></div>",
+      "css": ".ds-chips { display:flex; gap:8px; } .ds-chip { height:32px; padding:0 12px; border:0; border-radius:8px; background:var(--chip, #272727); color:var(--text, #F1F1F1); font:500 14px/1 Roboto, Arial, sans-serif; cursor:pointer; transition:background-color 120ms linear; } .ds-chip:hover { background:var(--chip-hover, #3F3F3F); } .ds-chip[aria-pressed=\"true\"] { background:var(--chip-active, #F1F1F1); color:var(--on-chip-active, #0F0F0F); } .ds-chip:focus-visible { outline:2px solid var(--link, #3EA6FF); outline-offset:2px; }"
+    },
+    {
+      "name": "Masthead Search",
+      "kind": "input",
+      "refersTo": "search-input",
+      "description": "Pill search that filters endpoints as you type.",
+      "html": "<form class=\"ds-search\" role=\"search\"><input type=\"search\" placeholder=\"Search endpoints, e.g. transcript\" aria-label=\"Search endpoints\"><button type=\"button\" aria-label=\"Search\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" aria-hidden=\"true\"><circle cx=\"10.5\" cy=\"10.5\" r=\"6.5\"/><path d=\"M20 20l-4.8-4.8\"/></svg></button></form>",
+      "css": ".ds-search { display:flex; height:40px; max-width:520px; } .ds-search input { flex:1; min-width:0; height:40px; padding:0 16px; border:1px solid var(--line, #3F3F3F); border-right:0; border-radius:999px 0 0 999px; background:var(--bg, #0F0F0F); color:var(--text, #F1F1F1); font:400 16px/1 Roboto, Arial, sans-serif; caret-color:var(--link, #3EA6FF); } .ds-search input::placeholder { color:var(--text-3, #717171); } .ds-search input:focus { outline:0; border-color:var(--link, #3EA6FF); } .ds-search button { display:grid; place-items:center; width:64px; border:1px solid var(--line, #3F3F3F); border-radius:0 999px 999px 0; background:var(--chip, #272727); color:var(--text, #F1F1F1); cursor:pointer; } .ds-search button:hover { background:var(--chip-hover, #3F3F3F); }"
+    },
+    {
+      "name": "Guide",
+      "kind": "nav",
+      "refersTo": "guide",
+      "description": "Left guide rows; current row Chip Grey and 500 weight.",
+      "html": "<nav class=\"ds-guide\"><a href=\"#\" aria-current=\"true\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 10.5L12 4l8 6.5V20h-5v-6H9v6H4z\"/></svg><span>Home</span></a><a href=\"#\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M8 6h12M8 12h12M8 18h12\"/></svg><span>Endpoints</span></a></nav>",
+      "css": ".ds-guide { display:grid; width:240px; padding:12px; } .ds-guide a { display:flex; align-items:center; gap:24px; height:40px; padding:0 12px; border-radius:10px; color:var(--text, #F1F1F1); text-decoration:none; font:400 14px/1 Roboto, Arial, sans-serif; } .ds-guide a:hover { background:var(--chip, #272727); } .ds-guide a[aria-current=\"true\"] { background:var(--chip, #272727); font-weight:500; } .ds-guide a:focus-visible { outline:2px solid var(--link, #3EA6FF); outline-offset:2px; } .ds-guide svg { width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.75; stroke-linecap:round; stroke-linejoin:round; }"
+    },
+    {
+      "name": "Method Badges and Status",
+      "kind": "chip",
+      "refersTo": "method-get",
+      "description": "HTTP verb badges and the live status pill.",
+      "html": "<div class=\"ds-row\"><span class=\"ds-m ds-get\">GET</span><span class=\"ds-m ds-post\">POST</span><span class=\"ds-m ds-patch\">PATCH</span><span class=\"ds-m ds-del\">DELETE</span><span class=\"ds-status\" data-state=\"ok\">Online</span><span class=\"ds-status\" data-state=\"error\">Offline</span></div>",
+      "css": ".ds-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; } .ds-m { display:inline-flex; align-items:center; justify-content:center; min-width:52px; height:22px; padding:0 6px; border-radius:4px; font:700 11px/1 'Roboto Mono', ui-monospace, monospace; letter-spacing:0.02em; } .ds-get { color:var(--m-get, #3EA6FF); background:var(--m-get-soft, #0B2741); } .ds-post { color:var(--m-post, #3DD068); background:var(--m-post-soft, #0E2A14); } .ds-patch { color:var(--m-patch, #F7B500); background:var(--m-patch-soft, #3A2C00); } .ds-del { color:var(--m-delete, #FF4E45); background:var(--m-delete-soft, #3A0A0F); } .ds-status { display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 12px 0 10px; border-radius:999px; background:var(--chip, #272727); color:var(--text, #F1F1F1); font:500 12px/1 Roboto, Arial, sans-serif; } .ds-status::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--text-3, #717171); } .ds-status[data-state=\"ok\"]::before { background:var(--ok, #2BA640); } .ds-status[data-state=\"error\"]::before { background:var(--red, #FF0033); }"
+    },
+    {
+      "name": "Video Card",
+      "kind": "card",
+      "refersTo": "thumb",
+      "description": "Code-drawn 16:9 thumbnail with a time badge over an avatar row; corners square on hover.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-thumb\"><div class=\"ds-line\"><span>2.43M subscribers</span><span>6,525 videos</span></div><span class=\"ds-badge\">1 unit</span></div><div class=\"ds-card-row\"><span class=\"ds-av\">CH</span><div><h3>Channel</h3><p>Name, handle, country, totals. Hidden counts stay empty.</p></div></div></article>",
+      "css": ".ds-card { display:grid; gap:12px; width:300px; font:400 14px/20px Roboto, Arial, sans-serif; color:var(--text, #F1F1F1); } .ds-thumb { position:relative; aspect-ratio:16/9; border-radius:12px; background:var(--bg-sunken, #000000); border:1px solid var(--line-soft, #272727); padding:16px; display:grid; align-content:center; font-size:12px; transition:border-radius 200ms cubic-bezier(0.16,1,0.3,1); } .ds-card:hover .ds-thumb { border-radius:0; } .ds-line { display:flex; justify-content:space-between; font-variant-numeric:tabular-nums; } .ds-badge { position:absolute; right:8px; bottom:8px; padding:1px 4px; border-radius:4px; background:#000000CC; color:#FFFFFF; font:500 12px/18px Roboto, Arial, sans-serif; } .ds-card-row { display:flex; gap:12px; } .ds-av { display:grid; place-items:center; flex:none; width:36px; height:36px; border-radius:50%; background:var(--chip, #272727); font-weight:500; } .ds-card-row h3 { margin:0 0 4px; font:500 16px/22px Roboto, Arial, sans-serif; } .ds-card-row p { margin:0; color:var(--text-2, #AAAAAA); }"
+    },
+    {
+      "name": "Player Progress",
+      "kind": "custom",
+      "refersTo": "player",
+      "description": "The always-dark player bar: red quota-day progress with scrub dot, LIVE dot and tabular clock.",
+      "html": "<div class=\"ds-player\"><div class=\"ds-prog\"><span class=\"ds-fill\"></span><span class=\"ds-dot\"></span></div><div class=\"ds-ctl\"><span class=\"ds-live\">LIVE</span><span class=\"ds-time\">14:32:10 / 24:00:00</span></div></div>",
+      "css": ".ds-player { width:420px; padding:48px 12px 6px; border-radius:12px; background:#000000; color:#F1F1F1; } .ds-prog { position:relative; height:3px; margin:0 4px 6px; background:#FFFFFF33; } .ds-fill { position:absolute; inset:0 auto 0 0; width:60%; background:#FF0033; } .ds-dot { position:absolute; top:50%; left:60%; width:13px; height:13px; margin:-6.5px 0 0 -6.5px; border-radius:50%; background:#FF0033; } .ds-ctl { display:flex; align-items:center; gap:12px; height:40px; padding:0 8px; font:400 13px/1 Roboto, Arial, sans-serif; } .ds-live { display:inline-flex; align-items:center; gap:6px; font-weight:500; letter-spacing:0.02em; } .ds-live::before { content:''; width:8px; height:8px; border-radius:50%; background:#FF0033; } .ds-time { font-variant-numeric:tabular-nums; color:#DDDDDD; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Channel on the Site It Analyses",
+    "overview": "**Creative North Star: \"The Channel on the Site It Analyses\"**\n\nThe API presents itself as a channel page and watch page on youtube.com, the visual reference Yasir Khan pinned for this world. It borrows that site's grammar, not its brand: near-black and white grounds, grey chips, pill buttons filled in the text colour, 12px rounded 16:9 thumbnails, Roboto, a masthead with a central search, and a left guide. Service facts take the place of video content: the live health response plays as the \"player\", the four fetch steps form the \"Up next\" queue, the stored record types are \"videos\" in a card grid, and the endpoint groups are shelves behind a chip bar.\n\nDensity is that of a video platform: compact 14px body text, 36px controls, generous 40px row gaps between cards, and quiet grey surfaces that let one red signal carry all urgency. Dark is the default theme; light follows the system preference or `data-theme=\"light\"` on any element. The page refuses the developer-landing default of a hero, stat tiles and icon cards.\n\nThe Swagger UI info section at `/api-docs` uses the same world in the light theme only, laid out for reading rather than browsing: a compact channel header with the actions on its right, one chip row of endpoint groups, then three open columns split by hairlines (a numbered fetch stepper, a live quota clock with its price ladder, and authorization with the house rules) and a borderless 4 by 2 grid of what gets stored. No boxed cards. The showcase at `/design-system` renders both themes side by side.",
+    "keyCharacteristics": [
+      "youtube.com grammar with no YouTube logo or brand asset.",
+      "One red, reserved for live state and time progress.",
+      "Pills for actions, 8px chips for filters, 12px cards for content.",
+      "Flat surfaces; only the drawer floats.",
+      "Every thumbnail is drawn in code from real public sample data; no raster imagery."
+    ],
+    "rules": [
+      {
+        "name": "The One Red Rule",
+        "body": "One red (#FF0033) is used only for live state and time progress, with one cited exception: the tallest bar of the brand mark, because the mark reads as a quota meter. Red is never decoration, never a button fill, never a heading.",
+        "section": "colors"
+      },
+      {
+        "name": "The Text-Coloured Button Rule",
+        "body": "The primary action is a pill filled in the text colour with the ground colour as its label. It inverts with the theme; it is never red and never blue.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Numbers Rule",
+        "body": "Any figure that changes or is compared (clock, cost column, counts in thumbnails) uses `font-variant-numeric: tabular-nums`.",
+        "section": "typography"
+      },
+      {
+        "name": "The Only-Drawers-Float Rule",
+        "body": "Only menus and drawers carry a shadow. Panels, cards, pills and thumbnails stay flat.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** keep Live Red (#FF0033) for live state and time progress, plus the tallest bar of the mark; use Red Text for red words and Now Tag Red (#CC0029) under white text.",
+      "**Do** fill the primary action pill with the text colour and the default pill with Chip Grey.",
+      "**Do** use 8px chips for filters and selection, and full pills for actions.",
+      "**Do** draw thumbnails in code from real public sample data, on the sunken ground with a time badge.",
+      "**Do** take every value from `tokens.css`, in hex, and give each new dark value a light counterpart.",
+      "**Do** re-apply pill and chip backgrounds under `.swagger-ui .ytca` for anything placed in the Swagger description."
+    ],
+    "donts": [
+      "**Don't** use any YouTube logo, play-button glyph, YouTube Sans or brand asset, and don't start a public name with \"YouTube\".",
+      "**Don't** use red for decoration, buttons, headings or emphasis.",
+      "**Don't** put a shadow on cards, panels, pills or thumbnails; only menus and drawers float.",
+      "**Don't** set content text in Tertiary Text; it falls below 4.5:1 on the dark ground.",
+      "**Don't** add blank lines or indentation inside `SERVICE_DESCRIPTION`.",
+      "**Don't** use em dashes in interface copy."
+    ]
+  }
+}
