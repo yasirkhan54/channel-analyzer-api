@@ -11,7 +11,7 @@ rx="2" fill="#0F0F0F"/><rect x="11.5" y="7" width="7" height="14" rx="2" fill="#
 width="7" height="20" rx="2" fill="#FF0033"/></svg></div>
 <div class="ytca-id">
 <h1>Channel Analyzer API</h1>
-<p class="ytca-meta"><b>@localhost:8000</b><i>·</i><span>v0.1.0</span><i>·</i><span>OpenAPI
+<p class="ytca-meta"><b>@localhost:8010</b><i>·</i><span>v0.1.0</span><i>·</i><span>OpenAPI
 3.1</span><i>·</i><span>10,000 units a day</span></p>
 <p class="ytca-desc">Fetch a channel once, read it at zero quota. Every route below is live; reads from
 storage never spend quota.</p>

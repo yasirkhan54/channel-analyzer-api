@@ -90,11 +90,11 @@ Local development only. There is no deployment for now.
 6. Check that it is up:
 
    ```bash
-   curl http://localhost:8000/health
+   curl http://localhost:8010/health
    # {"status":"ok","database":"ok"}
    ```
 
-7. Open the API docs at http://localhost:8000/api-docs, click **Authorize**, paste your `CLIENT_API_KEY` and try the endpoints.
+7. Open the API docs at http://localhost:8010/api-docs, click **Authorize**, paste your `CLIENT_API_KEY` and try the endpoints.
 
 ### Everyday commands
 
@@ -118,15 +118,15 @@ After a computer restart, the shared Postgres comes back on its own (`restart: u
 
 - **`/health` returns 503**: Postgres is not reachable. Check `docker ps --filter name=^postgres$` and `docker logs postgres`.
 - **`network jarvis-os_default not found`**: the shared Postgres is not running; start it from `jarvis-os-infra` (see Prerequisites).
-- **Port 8000 already in use** (the Jarvis OS website also uses 8000): run on another host port with `API_PORT=8010 docker compose up -d`, or find what is using it with `ss -ltnp | grep ':8000'`.
+- **Port 8010 already in use**: run on another host port with `API_PORT=8011 docker compose up -d`, or find what is using it with `ss -ltnp | grep ':8010'`.
 - **401 on every endpoint**: the `X-API-Key` header is missing or does not match `CLIENT_API_KEY` in `.env`.
 - **API container exits on start**: run `docker compose logs api`; it is usually a failed migration or an empty required variable in `.env`.
 
 ### Addresses
 
-- Home page: http://localhost:8000/ (public; live status, quota reset countdown and the route list)
-- API docs (Swagger UI): http://localhost:8000/api-docs
-- Health: http://localhost:8000/health (returns 200 with `"database": "ok"` when Postgres is reachable, 503 otherwise)
+- Home page: http://localhost:8010/ (public; live status, quota reset countdown and the route list)
+- API docs (Swagger UI): http://localhost:8010/api-docs
+- Health: http://localhost:8010/health (returns 200 with `"database": "ok"` when Postgres is reachable, 503 otherwise)
 - Postgres on the host: `localhost:5432` (shared `postgres` container, database `youtube_channel_analyzer`, user `postgres`, password in `~/.config/postgres/password`)
 - Containers: `channel-analyzer-api` (plus the one-off `channel-analyzer-postgres-setup`), on the `jarvis-os_default` network of the shared Postgres
 
@@ -137,7 +137,7 @@ The `api` container runs `prisma migrate deploy` on start, then uvicorn with `--
 Every endpoint except the home page (`/`), `/health` and the API docs requires the static client key in the `X-API-Key` header:
 
 ```bash
-curl -H "X-API-Key: $CLIENT_API_KEY" http://localhost:8000/channels
+curl -H "X-API-Key: $CLIENT_API_KEY" http://localhost:8010/channels
 ```
 
 ### Generate CLIENT_API_KEY
@@ -198,7 +198,7 @@ Rotating the key: generate a new one the same way, restart with `docker compose 
 To check it works, resolve any public channel once (costs 1 unit):
 
 ```bash
-curl -X POST http://localhost:8000/channels/resolve \
+curl -X POST http://localhost:8010/channels/resolve \
   -H "X-API-Key: $CLIENT_API_KEY" -H "Content-Type: application/json" \
   -d '{"input": "@YouTube"}'
 ```
@@ -219,7 +219,7 @@ Quota facts for this key:
 | `TRANSCRIPT_PROXY_URL` | No | Residential proxy for transcript requests. Not needed when running locally; kept for a future server. |
 | `POSTGRES_DB` | No | Database name on the shared Postgres (default `youtube_channel_analyzer`). |
 | `POSTGRES_PASSWORD_FILE` | No | Path to the shared Postgres password file (default `~/.config/postgres/password`). |
-| `API_PORT` | No | Host port for the API (default `8000`). |
+| `API_PORT` | No | Host port for the API (default `8010`; 8000 is the Jarvis OS website). |
 
 Never commit `.env`.
 

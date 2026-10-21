@@ -96,7 +96,7 @@
           <div class="avatar-xl" aria-hidden="true"><svg><use href="#mark"/></svg></div>
           <div>
             <h1 id="channel-name">Channel Analyzer API</h1>
-            <p class="meta-line"><b>@localhost:8000</b><span class="sep"></span><span><span id="ep-count">38</span> endpoints</span><span class="sep"></span><span>10,000 units a day</span><span class="sep"></span><span>v0.1.0</span></p>
+            <p class="meta-line"><b>@localhost:8010</b><span class="sep"></span><span><span id="ep-count">38</span> endpoints</span><span class="sep"></span><span>10,000 units a day</span><span class="sep"></span><span>v0.1.0</span></p>
             <p class="desc">Fetch a channel once, read it at zero quota. Send a channel URL, @handle or ID: a background job collects the channel, every video, comments with replies, playlists and transcripts, pauses when the daily quota runs out and picks up again after the reset.</p>
             <div class="actions">
               <a class="pill pill-primary" href="/api-docs">Open API docs</a>
@@ -212,7 +212,7 @@
             <h3><svg class="i"><use href="#i-key"/></svg>Send <code>X-API-Key</code></h3>
             <div class="code">
               <pre id="curl-snippet">curl -H "X-API-Key: $CLIENT_API_KEY"<span class="cont"> \</span>
-  http://localhost:8000/channels</pre>
+  http://localhost:8010/channels</pre>
               <button class="pill" type="button" data-copy="curl-snippet"><svg class="i"><use href="#i-copy"/></svg><span>Copy</span></button>
             </div>
             <p>The key is <code>CLIENT_API_KEY</code> in the project's <code>.env</code>. In the docs, use <b>Authorize</b> and paste only the value. Without it, protected routes answer <code>401</code>; more than 60 requests a minute answer <code>429</code>.</p>

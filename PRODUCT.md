@@ -23,7 +23,7 @@ It does not show YouTube pages; it keeps a channel's whole public record in one 
 
 ## Operating Context
 
-- Runs locally on the owner's computer with Docker Compose (API on http://localhost:8000, Postgres on localhost:5432, the shared `postgres` container from jarvis-os-infra). No deployment.
+- Runs locally on the owner's computer with Docker Compose (API on http://localhost:8010, Postgres on localhost:5432, the shared `postgres` container from jarvis-os-infra). No deployment.
 - Owner and operator in Pakistan: quota reset is midnight Pacific time, shown in PKT alongside Pacific.
 - Our API is used through Swagger UI (`/api-docs`) or HTTP clients sending the `X-API-Key` header.
 - The home page at `/` is public (no client key) and is the project's home page; `/health` and the docs are the other public paths.

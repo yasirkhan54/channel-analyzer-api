@@ -28,6 +28,6 @@ RUN uv sync --frozen --no-install-project
 COPY . .
 RUN prisma generate
 
-EXPOSE 8000
+EXPOSE 8010
 
-CMD ["sh", "-c", "prisma migrate deploy && uvicorn application:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "prisma migrate deploy && uvicorn application:app --host 0.0.0.0 --port 8010"]

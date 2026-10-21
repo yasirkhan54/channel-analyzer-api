@@ -27,11 +27,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-youtube_channel_analyzer}
     # Local development: code is mounted and uvicorn reloads on change.
     # DATABASE_URL is built from the shared Postgres password file.
-    command: sh -c 'export DATABASE_URL="postgresql://postgres:$$(cat /run/secrets/postgres_password)@postgres:5432/$$POSTGRES_DB" && prisma migrate deploy && uvicorn application:app --host 0.0.0.0 --port 8000 --reload'
+    command: sh -c 'export DATABASE_URL="postgresql://postgres:$$(cat /run/secrets/postgres_password)@postgres:5432/$$POSTGRES_DB" && prisma migrate deploy && uvicorn application:app --host 0.0.0.0 --port 8010 --reload'
     volumes:
       - .:/app
     ports:
-      - "${API_PORT:-8000}:8000"
+      - "${API_PORT:-8010}:8010"
     secrets:
       - postgres_password
     depends_on:
