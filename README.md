@@ -113,7 +113,7 @@ Run these from the `channel-analyzer-api` folder:
 
 Code edits reload the server automatically; no restart needed. After changing `.env`, run `docker compose up -d` again so the container picks up the new values.
 
-After a computer restart, the shared Postgres comes back on its own (`restart: unless-stopped`) but the API does not, so run `docker compose up -d` again.
+After a computer restart, the shared Postgres and the API both come back on their own (`restart: unless-stopped`). If the API starts before Postgres is ready, its migration step fails and Docker restarts it until it connects.
 
 ### Troubleshooting
 
