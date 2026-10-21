@@ -1,0 +1,6 @@
+#!/bin/bash
+# What each agent launches: a stdio bridge to the analyzer's MCP endpoint (http://localhost:8010/mcp/).
+# The client key is read from this repo's .env at start; it is never stored in agent configs.
+# Install: install -m 755 deploy/channel-analyzer-mcp-connect ~/.local/bin/
+cd "$HOME/projects/projects/youtube channel analyzer/channel-analyzer-api" || exit 1
+exec .venv/bin/python -m utilities.mcp_connect "$@"

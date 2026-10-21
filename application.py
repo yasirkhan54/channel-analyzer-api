@@ -6,6 +6,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from fastapi.staticfiles import StaticFiles
+from fastmcp.utilities.lifespan import combine_lifespans
 
 from configurations.database_configuration import database
 from configurations.environment_configuration import get_settings
@@ -14,6 +15,7 @@ from constants.application_constants import (
     API_TAGS,
     ASSETS_URL,
     CLIENT_KEY_HEADER,
+    MCP_URL,
     OPENAPI_URL,
     SERVICE_DESCRIPTION,
     SERVICE_TITLE,
@@ -40,6 +42,7 @@ from routes import (
     video_fetch_routes,
 )
 from services import fetch_job_runner
+from utilities.mcp_server import create_mcp_server
 from utilities.openapi_examples import add_examples
 
 
@@ -123,3 +126,10 @@ app.include_router(caption_routes.router)
 app.include_router(category_routes.router)
 app.include_router(channel_management_routes.router)
 app.include_router(fetch_job_routes.router)
+
+# MCP server for AI agents, built from the routes above (so it goes last). It needs the client key too.
+mcp_server = create_mcp_server(app)
+# Mounted at MCP_URL, so the endpoint inside the MCP app is its root.
+mcp_app = mcp_server.http_app(path="/")
+app.mount(MCP_URL, mcp_app)
+app.router.lifespan_context = combine_lifespans(lifespan, mcp_app.lifespan)

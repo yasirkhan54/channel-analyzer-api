@@ -44,6 +44,7 @@ A channel with 1,000 videos costs about 40 units for the videos and about 1,000 
 ## Stack
 
 - Python 3.12, FastAPI, uv (`pyproject.toml` + `uv.lock`)
+- FastMCP for the MCP server (built from the FastAPI routes)
 - PostgreSQL 17 through Prisma Client Python (`prisma-client-py`, asyncio interface)
 - Docker Compose for local development (service `api`; the database lives on the shared `postgres` container from [jarvis-os-infra](https://github.com/yasirkhan54/jarvis-os-infra))
 - ruff (lint and format), pytest
@@ -127,10 +128,33 @@ After a computer restart, the shared Postgres comes back on its own (`restart: u
 - Home page: http://localhost:8010/ (public; live status, quota reset countdown and the route list)
 - API docs (Swagger UI): http://localhost:8010/api-docs
 - Health: http://localhost:8010/health (returns 200 with `"database": "ok"` when Postgres is reachable, 503 otherwise)
+- MCP server for AI agents: http://localhost:8010/mcp/ (needs the client key, see [MCP server](#mcp-server))
 - Postgres on the host: `localhost:5432` (shared `postgres` container, database `youtube_channel_analyzer`, user `postgres`, password in `~/.config/postgres/password`)
 - Containers: `channel-analyzer-api` (plus the one-off `channel-analyzer-postgres-setup`), on the `jarvis-os_default` network of the shared Postgres
 
 The `api` container runs `prisma migrate deploy` on start, then uvicorn with `--reload`; the code is mounted, so edits reload the server. Database data lives in the shared `postgres` container (volume `postgres_data`). `docker compose down` keeps it; to start from an empty database, run `docker exec postgres dropdb -U postgres youtube_channel_analyzer` and then `docker compose up -d`.
+
+## MCP server
+
+The API is also an MCP server, so AI agents (Claude Code, Antigravity) can use it as tools. It runs inside the `api` container at http://localhost:8010/mcp/ (Streamable HTTP), so it is up whenever the API is.
+
+- **Tools:** every API operation is one tool, named after its controller function (`get_quota`, `resolve_channel`, `create_fetch_job`, `get_fetch_job`, `list_channel_videos`, ...), with the same inputs, descriptions and quota rules as the endpoint. They are built from the OpenAPI schema at start (`utilities/mcp_server.py`), so a new endpoint becomes a tool with no extra code.
+- **Auth:** `/mcp/` needs the `X-API-Key` header like every other endpoint. Tools call the API in-process with the key, so the key check, rate limit and validation are the same as over HTTP.
+- **Agents:** they launch `~/.local/bin/channel-analyzer-mcp-connect` (stdio), which runs `python -m utilities.mcp_connect` from this repo. It reads `CLIENT_API_KEY` from `.env` and forwards to the HTTP endpoint, so the key is never written into an agent's MCP config. The server is registered as `youtube-analyzer` in `~/.config/claude-shared/mcp.json` and in the agy profiles' `mcp_config.json`.
+
+Set it up on a new computer, after the API is running and `uv sync` has been run on the host:
+
+```bash
+install -m 755 deploy/channel-analyzer-mcp-connect ~/.local/bin/
+```
+
+Then add this entry under `mcpServers` in the agent's MCP config and restart the agent:
+
+```json
+"youtube-analyzer": { "command": "/home/<user>/.local/bin/channel-analyzer-mcp-connect", "args": [] }
+```
+
+`ANALYZER_MCP_URL` overrides the endpoint the bridge connects to (default `http://localhost:8010/mcp/`).
 
 ## Client key
 
@@ -258,12 +282,13 @@ middleware/         client key middleware
 models/             domain models
 validators/         Pydantic request and response schemas
 configurations/     settings (pydantic-settings) and the Prisma client
-utilities/          helpers
+utilities/          helpers, MCP server (mcp_server.py) and its stdio bridge (mcp_connect.py)
 constants/          constants
 type_definitions/   shared type definitions (named this way because a `types` package would shadow the Python standard library module)
 tests/              pytest tests
 public/             static files
 prisma/             schema.prisma and migrations/
+deploy/             channel-analyzer-mcp-connect, the agents' MCP launcher
 application.py      FastAPI entrypoint
 ```
 

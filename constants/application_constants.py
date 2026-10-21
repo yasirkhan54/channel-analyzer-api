@@ -128,6 +128,14 @@ ASSETS_URL = "/assets"
 DESIGN_SYSTEM_URL = "/design-system"
 DOCS_OAUTH2_REDIRECT_URL = "/api-docs/oauth2-redirect"
 CLIENT_KEY_HEADER = "X-API-Key"
+MCP_URL = "/mcp"
+MCP_INSTRUCTIONS = """YouTube Channel Analyzer: collects a channel's public data from the YouTube Data API
+into a local database, then reads it back at no quota cost.
+- Reads (list_*, get_*) are free; fetches, searches and refreshes spend YouTube quota (10,000 units a day).
+- Check get_quota before large work, and use estimate_fetch_job or estimate_search for the cost first.
+- Start with resolve_channel (URL, @handle or ID) to store a channel; create_fetch_job collects everything
+  in the background, then poll get_fetch_job.
+- delete_channel removes a channel and all its stored data; only use it when asked."""
 
 # Paths reachable without a client key (R-15 exceptions: home, health check, API docs, design system).
 PUBLIC_PATHS = frozenset(
