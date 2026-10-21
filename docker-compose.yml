@@ -1,43 +1,51 @@
 services:
-  postgres:
-    image: postgres:17
-    container_name: channel-analyzer-postgres
-    restart: unless-stopped
+  # Creates the youtube_channel_analyzer database on the shared "postgres"
+  # container (started by jarvis-os-infra) when it does not exist yet, then exits.
+  postgres-setup:
+    image: postgres:17-alpine
+    container_name: channel-analyzer-postgres-setup
+    restart: "no"
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-youtube_channel_analyzer}
-    ports:
-      - "127.0.0.1:5433:5432"
-    volumes:
-      # Data lives in the group folder, next to this repo.
-      - ../channel-analyzer-database:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+    command:
+      - sh
+      - -c
+      - |
+        export PGPASSWORD="$$(cat /run/secrets/postgres_password)"
+        psql -h postgres -U postgres -tAc "select 1 from pg_database where datname = '$$POSTGRES_DB'" | grep -q 1 \
+          || createdb -h postgres -U postgres "$$POSTGRES_DB"
+    secrets:
+      - postgres_password
     networks:
-      - channel-analyzer-network
+      - postgres-network
 
   api:
     build: .
     container_name: channel-analyzer-api
     env_file: .env
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-youtube_channel_analyzer}
+      POSTGRES_DB: ${POSTGRES_DB:-youtube_channel_analyzer}
     # Local development: code is mounted and uvicorn reloads on change.
-    command: sh -c "prisma migrate deploy && uvicorn application:app --host 0.0.0.0 --port 8000 --reload"
+    # DATABASE_URL is built from the shared Postgres password file.
+    command: sh -c 'export DATABASE_URL="postgresql://postgres:$$(cat /run/secrets/postgres_password)@postgres:5432/$$POSTGRES_DB" && prisma migrate deploy && uvicorn application:app --host 0.0.0.0 --port 8000 --reload'
     volumes:
       - .:/app
     ports:
-      - "8000:8000"
+      - "${API_PORT:-8000}:8000"
+    secrets:
+      - postgres_password
     depends_on:
-      postgres:
-        condition: service_healthy
+      postgres-setup:
+        condition: service_completed_successfully
     networks:
-      - channel-analyzer-network
+      - postgres-network
+
+secrets:
+  postgres_password:
+    file: ${POSTGRES_PASSWORD_FILE:-${HOME}/.config/postgres/password}
 
 networks:
-  channel-analyzer-network:
-    name: channel-analyzer-network
+  # Network of the shared "postgres" container from jarvis-os-infra.
+  postgres-network:
+    name: jarvis-os_default
+    external: true

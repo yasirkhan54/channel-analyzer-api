@@ -45,7 +45,7 @@ A channel with 1,000 videos costs about 40 units for the videos and about 1,000 
 
 - Python 3.12, FastAPI, uv (`pyproject.toml` + `uv.lock`)
 - PostgreSQL 17 through Prisma Client Python (`prisma-client-py`, asyncio interface)
-- Docker Compose for local development (services `api` and `postgres`)
+- Docker Compose for local development (service `api`; the database lives on the shared `postgres` container from [jarvis-os-infra](https://github.com/yasirkhan54/jarvis-os-infra))
 - ruff (lint and format), pytest
 
 Local development only. There is no deployment for now.
@@ -55,12 +55,13 @@ Local development only. There is no deployment for now.
 ### Prerequisites
 
 - Docker with the Compose plugin (`docker compose version` should work)
+- The shared `postgres` container running: start it from `~/projects/jarvis os/jarvis-os-infra` with `docker compose up -d postgres`. Its password is read from `~/.config/postgres/password`.
 - Git
 - Optional, only for running Prisma, ruff or pytest on the host: [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 itself)
 
 ### First time setup
 
-1. Clone the repository into the group folder, so the database folder ends up next to it:
+1. Clone the repository into the group folder:
 
    ```bash
    cd ~/"projects/projects/youtube channel analyzer"
@@ -78,13 +79,13 @@ Local development only. There is no deployment for now.
 
 4. Set `YOUTUBE_API_KEY` in `.env` to a **YouTube Data API v3** key if you want to fetch channels from YouTube. See [Get a YouTube Data API v3 key](#get-a-youtube-data-api-v3-key) for the steps. Without it the app starts and reads stored data, but fetch, search and refresh endpoints fail.
 
-5. Build and start both containers:
+5. Build and start the API:
 
    ```bash
    docker compose up -d --build
    ```
 
-   The first start pulls `postgres:17`, builds the API image and applies all migrations.
+   The first start creates the `youtube_channel_analyzer` database on the shared `postgres` container, builds the API image and applies all migrations.
 
 6. Check that it is up:
 
@@ -111,12 +112,13 @@ Run these from the `channel-analyzer-api` folder:
 
 Code edits reload the server automatically; no restart needed. After changing `.env`, run `docker compose up -d` again so the container picks up the new values.
 
-After a computer restart, Postgres comes back on its own (`restart: unless-stopped`) but the API does not, so run `docker compose up -d` again.
+After a computer restart, the shared Postgres comes back on its own (`restart: unless-stopped`) but the API does not, so run `docker compose up -d` again.
 
 ### Troubleshooting
 
-- **`/health` returns 503**: Postgres is not reachable. Check `docker compose ps` and `docker compose logs postgres`.
-- **Port 8000 or 5433 already in use**: find what is using it with `ss -ltnp | grep -E ':8000|:5433'` and stop it, or change the host port in `docker-compose.yml`.
+- **`/health` returns 503**: Postgres is not reachable. Check `docker ps --filter name=^postgres$` and `docker logs postgres`.
+- **`network jarvis-os_default not found`**: the shared Postgres is not running; start it from `jarvis-os-infra` (see Prerequisites).
+- **Port 8000 already in use** (the Jarvis OS website also uses 8000): run on another host port with `API_PORT=8010 docker compose up -d`, or find what is using it with `ss -ltnp | grep ':8000'`.
 - **401 on every endpoint**: the `X-API-Key` header is missing or does not match `CLIENT_API_KEY` in `.env`.
 - **API container exits on start**: run `docker compose logs api`; it is usually a failed migration or an empty required variable in `.env`.
 
@@ -125,10 +127,10 @@ After a computer restart, Postgres comes back on its own (`restart: unless-stopp
 - Home page: http://localhost:8000/ (public; live status, quota reset countdown and the route list)
 - API docs (Swagger UI): http://localhost:8000/api-docs
 - Health: http://localhost:8000/health (returns 200 with `"database": "ok"` when Postgres is reachable, 503 otherwise)
-- Postgres on the host: `localhost:5433` (database `youtube_channel_analyzer`, user and password `postgres` unless `POSTGRES_*` is set in `.env`)
-- Containers: `channel-analyzer-api` and `channel-analyzer-postgres`, on the `channel-analyzer-network` network
+- Postgres on the host: `localhost:5432` (shared `postgres` container, database `youtube_channel_analyzer`, user `postgres`, password in `~/.config/postgres/password`)
+- Containers: `channel-analyzer-api` (plus the one-off `channel-analyzer-postgres-setup`), on the `jarvis-os_default` network of the shared Postgres
 
-The `api` container runs `prisma migrate deploy` on start, then uvicorn with `--reload`; the code is mounted, so edits reload the server. Database data is kept in the `channel-analyzer-database` folder next to this repository, in the group folder (outside git). `docker compose down` keeps it; to start from an empty database, stop the containers and delete that folder (it is owned by the container's Postgres user, so use `sudo`).
+The `api` container runs `prisma migrate deploy` on start, then uvicorn with `--reload`; the code is mounted, so edits reload the server. Database data lives in the shared `postgres` container (volume `postgres_data`). `docker compose down` keeps it; to start from an empty database, run `docker exec postgres dropdb -U postgres youtube_channel_analyzer` and then `docker compose up -d`.
 
 ## Client key
 
@@ -211,11 +213,13 @@ Quota facts for this key:
 
 | Variable | Required | Description |
 |---|---|---|
-| `DATABASE_URL` | Yes | Postgres connection string. The value in `.env` is for running Prisma from the host (`localhost:5433`); Docker Compose sets its own value for the `api` container. |
+| `DATABASE_URL` | Yes | Postgres connection string. The value in `.env` is for running Prisma from the host (`localhost:5432`, with the password from `~/.config/postgres/password`); Docker Compose builds its own value for the `api` container from that password file. |
 | `YOUTUBE_API_KEY` | For fetching | YouTube Data API v3 key (an API key from a Google Cloud project with the YouTube Data API v3 enabled). Server side only; sent in the `X-Goog-Api-Key` header, never logged or returned. |
 | `CLIENT_API_KEY` | Yes | Static key callers send in `X-API-Key`. |
 | `TRANSCRIPT_PROXY_URL` | No | Residential proxy for transcript requests. Not needed when running locally; kept for a future server. |
-| `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` | No | Override the Compose Postgres defaults (`postgres`, `postgres`, `youtube_channel_analyzer`). |
+| `POSTGRES_DB` | No | Database name on the shared Postgres (default `youtube_channel_analyzer`). |
+| `POSTGRES_PASSWORD_FILE` | No | Path to the shared Postgres password file (default `~/.config/postgres/password`). |
+| `API_PORT` | No | Host port for the API (default `8000`). |
 
 Never commit `.env`.
 
@@ -225,7 +229,7 @@ The schema is `prisma/schema.prisma`; migrations are in `prisma/migrations/`.
 
 ```bash
 uv sync                                       # install dependencies on the host
-docker compose up -d postgres                 # start only Postgres
+docker compose up -d postgres-setup           # make sure the database exists on the shared Postgres
 uv run prisma migrate dev --name <change>     # create and apply a migration after editing the schema
 uv run prisma generate                        # regenerate the client (migrate dev also does this)
 ```
